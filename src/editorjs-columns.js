@@ -17,8 +17,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
 
-console.log("Booted123");
-
 class EditorJsColumns {
   /**
    * Default placeholder for Paragraph Tool
