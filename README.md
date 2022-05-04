@@ -21,7 +21,7 @@ An **ALPHA** plugin which allows the user to have columns
 * Pressing enter key inside a column, will exit the column
 * Pressing tab key inside column will launch both column, and parent tools
 * Copy/Pasting can cause duplication of data in the wrong place
-* SVG logo is not rendering correctly in new vertical menu
+* ~~SVG logo is not rendering correctly in new vertical menu~~
 
 
 ## Docs
