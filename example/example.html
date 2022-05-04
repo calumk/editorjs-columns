@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Editor.js example</title>
+  <link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
+  <link href="assets/demo.css" rel="stylesheet">
+  <script src="assets/json-preview.js"></script>
+  <script src="example_data.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+</head>
+<body>
+  <div class="ce-example">
+    <div class="ce-example__header">
+      <!-- <a class="ce-example__header-logo" href="https://www.npmjs.com/package/@calumk/editorjs-nested-checklist">
+        <svg class="svgicon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>npm</title><path d="M1.763 0C.786 0 0 .786 0 1.763v20.474C0 23.214.786 24 1.763 24h20.474c.977 0 1.763-.786 1.763-1.763V1.763C24 .786 23.214 0 22.237 0zM5.13 5.323l13.837.019-.009 13.836h-3.464l.01-10.382h-3.456L12.04 19.17H5.113z"/></svg>
+      </a> -->
+      <a class="ce-example__header-logo" href="https://github.com/calumk/editorjs-markdown-impex">
+        <svg class="svgicon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+        @calumk/editorjs-columns
+      </a>
+    </div>
+    <div class="ce-example__content _ce-example__content--small">
+
+      
+      <div class="editorjs-wrapper">
+        <div id="editorjs"></div>
+      </div>
+
+      <div class="ce-example__button" id="saveButton">
+        editor.save()
+      </div>
+      <div class="ce-example__statusbar">
+        Readonly:
+        <b id="readonly-state">
+          Off
+        </b>
+        <div class="ce-example__statusbar-button" id="toggleReadOnlyButton">
+          toggle
+        </div>
+      </div>
+    </div>
+    <div class="ce-example__output">
+      <pre class="ce-example__output-content" id="output"></pre>
+    </div>
+  </div>
+</body>
+
+
+
+
+  <!-- Load Official Tools -->
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/delimiter@latest"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/simple-image@latest"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@editorjs/checklist@latest"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/quote@latest"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@editorjs/code@latest"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/embed@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/table@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/link@latest"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@editorjs/warning@latest"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/marker@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/inline-code@latest"></script>
+    
+
+  
+  <!-- Load Local Tools -->
+    <script src="../dist/editorjs-columns.bundle.js"></script>
+
+
+  <!-- Load 3rd Party Tools -->
+    <script src="https://cdn.jsdelivr.net/npm/editorjs-alert@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@calumk/editorjs-codeflask@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@calumk/editorjs-nested-checklist@latest"></script>
+
+
+  <!-- Load Editor.js's Core -->
+  <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@codexteam/shortcuts@1.1.1/dist/shortcuts.min.js"></script>
+
+  <!-- Initialization -->
+  <script>
+
+    window.editorjs_global_tools = {
+
+    // Load Official Tools
+      header: Header,
+      delimiter: Delimiter,
+      image: SimpleImage,
+      // checklist: Checklist,
+      list: editorjsNestedChecklist,
+      quote: Quote,
+      code : editorjsCodeflask,
+      embed: Embed,
+      table: Table,
+      linkTool: LinkTool,
+      // warning: Warning,
+      marker: Marker,
+      // inlineCode:,
+
+    // Load Local Tools
+      // markdownimporter: editorjsMarkdownImporter,
+      // markdownexporter: editorjsMarkdownExporter,
+      columns : editorjsColumns,
+
+    // Load 3rd Party Tools
+      alert : Alert
+
+    },
+
+    editor = new EditorJS({
+      readOnly: false,
+      holder: 'editorjs',
+      tools : window.editorjs_global_tools,
+      data: example_data, // Imported from example_data.js
+
+
+      onReady: function(){
+        console.log("Delaying Save to launch Column Editors")
+        setTimeout(() => {
+          saveButton.click();
+        },2000)
+        
+      },
+      onChange: function(e) {
+        console.log(e)
+        // console.log('something changed');
+      }
+    });
+
+    let cmdA = new Shortcut({
+    name : 'ENTER',
+    on : document.body,
+    callback: function(event) {
+        // your handler
+        console.log("TEST")
+        console.log(event)
+        event.preventDefault();
+      }
+  });
+
+
+    // Buttons
+    const saveButton = document.getElementById('saveButton');
+    const toggleReadOnlyButton = document.getElementById('toggleReadOnlyButton');
+    const readOnlyIndicator = document.getElementById('readonly-state');
+
+
+    // Save Example
+    saveButton.addEventListener('click', function () {
+      editor.save()
+        .then((savedData) => {
+          cPreview.show(savedData, document.getElementById("output"));
+        })
+        .catch((error) => {
+          console.error('Saving error', error);
+        });
+    });
+
+    // Toggle Readonly mode
+    toggleReadOnlyButton.addEventListener('click', async () => {
+      const readOnlyState = await editor.readOnly.toggle();
+
+      readOnlyIndicator.textContent = readOnlyState ? 'On' : 'Off';
+    });
+
+  </script>
+
+
+<style>
+
+.editorjs-wrapper{
+  border: 1px solid #eee;
+  border-radius: 5px;
+  padding:0px;
+  margin-bottom: 10px;
+  box-shadow: 0 6px 18px #e8edfa80;
+}
+
+.ce-block__content, 
+.ce-toolbar__content {
+  max-width: calc(100% - 50px);  /* example value, adjust for your own use case */
+}
+
+.ce-toolbar__actions{
+  /* position: relative; */
+  right: calc(100% + 30px); 
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 4px;
+}
+
+.codex-editor--narrow .codex-editor__redactor{
+  margin: 0;
+}
+
+.ce-editorjsColumns_col{
+  border: 1px solid #eee;
+  border-radius: 5px;
+  flex: 50%;
+  gap: 10px;
+  padding-top:10px;
+}
+
+.ce-editorjsColumns_col:focus-within{
+  box-shadow: 0 6px 18px #e8edfa80;
+}
+
+.ce-editorjsColumns_wrapper{
+  display: flex;
+  width:100%;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+
+</style>
+
+
+</html>

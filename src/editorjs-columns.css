@@ -1,0 +1,22 @@
+.ce-paragraphNote {
+    line-height: 1.6em;
+    outline: none;
+    background-color: #0091DB;
+    color:#fff;
+    padding: 10px;
+    margin : 15px;
+}
+.ce-paragraphNote::before {
+  content: "Note:";
+  color: #fff;
+  font-weight: bold;
+  width:100%;
+  display: inline-block;
+}
+
+.ce-paragraphNote[data-placeholder]:empty::before{
+  content: attr(data-placeholder);
+  color: #707684;
+  font-weight: normal;
+  opacity: 0;
+}
