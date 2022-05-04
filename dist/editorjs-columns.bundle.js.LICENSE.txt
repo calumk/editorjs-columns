@@ -1,0 +1,8 @@
+/**
+ * Base Paragraph Note Block for the Editor.js.
+ * Represents simple paragraph
+ *
+ * @author Calum Knott (calum@calumk.com)
+ * @copyright Calum Knott
+ * @license The MIT License (MIT)
+ */
