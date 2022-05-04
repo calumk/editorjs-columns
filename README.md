@@ -1,6 +1,10 @@
-# EditorJS Columns
+# @calumk/editorjs-Columns
 
 An **ALPHA** plugin which allows the user to have columns
+
+## Installation
+
+> NPM : Todo
 
 
 ## Features 
