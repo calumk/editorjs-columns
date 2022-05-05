@@ -7,6 +7,10 @@ An **ALPHA** plugin which allows the user to have columns
 > NPM : Todo
 
 
+## Demo
+
+![demo](assets/demo.gif)
+
 ## Features 
 
 * [x] Support new vertical menu style
