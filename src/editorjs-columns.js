@@ -51,14 +51,19 @@ class EditorJsColumns {
 
 		this.colWrapper = undefined;
 
-		this.editors.numberOfColumns = 3;
+		
 		this.editors.cols = [];
 
 		this.data = data;
 
 		if (!Array.isArray(this.data.cols)) {
 			this.data.cols = [];
-		}
+      this.editors.numberOfColumns = 2;
+		}else{
+      this.editors.numberOfColumns = this.data.cols.length
+    }
+
+    
 	}
 
 	static get isReadOnlySupported() {
