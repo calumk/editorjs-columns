@@ -30,7 +30,7 @@ None yet, see example/example.html for useage.
 
 ---
 
-> Note : Requires tools to be bound to global variable, so the same tools can be accessed in nested instance
+> Note : Currently Requires tools to be bound to global variable, so the same tools can be accessed in nested instance - This will likley change to a config var
 
 ```
 window.editorjs_global_tools = {

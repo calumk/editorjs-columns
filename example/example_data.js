@@ -17,43 +17,34 @@ let example_data = {
 			type: "delimiter",
 		},
 		{
+ 
             "type" : "columns",
             "data" : {
-                "col0" : {
-                    "blocks" : [
-                        {
-                            "type" : "header",
-                            "data" : {
-                                "text" : "Col 1",
-                                "level" : 4
+                "cols" : [
+                    {
+                        "blocks" : [
+                            {
+              
+                                "type" : "paragraph",
+                                "data" : {
+                                    "text" : "Hello World"
+                                }
                             }
-                        },
-                        {
-                            "type" : "paragraph",
-                            "data" : {
-                                "text" : "This is Column 1"
+                        ],
+                    
+                    },
+                    {
+                        "blocks" : [
+                            {     
+                                "type" : "paragraph",
+                                "data" : {
+                                    "text" : "ABCDEF"
+                                }
                             }
-                        }
-                    ],
-                },
-                "col1" : {
-                    "blocks" : [
-                        {
-                            "type" : "header",
-                            "data" : {
-                                "text" : "Col 2",
-                                "level" : 3
-                            }
-                        },
-                        {
-
-                            "type" : "paragraph",
-                            "data" : {
-                                "text" : "This is Column 2"
-                            }
-                        }
-                    ],
-                }
+                        ],
+                   
+                    }
+                ]
             }
         }
 	],
