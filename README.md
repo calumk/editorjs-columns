@@ -12,15 +12,18 @@ An **ALPHA** plugin which allows the user to have columns
 * [x] Support new vertical menu style
 * [x] Save/Load
 * [x] Support for == 2 colums
-* [ ] Support for >= 3 columns
-    * [ ] Migrate storage to array
-    * [ ] Add tool to change type
+* [x] Support for >= 3 columns
+    * [x] Migrate storage to array
+    * [x] Add tool to change type
+    * [x] Added tool to switch/roll arrays
 
 
 # Known Bugs
-* Pressing enter key inside a column, will exit the column
+* Pressing enter key inside a column, will exit the column 
+    * Can be solved (sort-of) by using @calumk/editorjs-paragraph-linebreakable
 * Pressing tab key inside column will launch both column, and parent tools
 * Copy/Pasting can cause duplication of data in the wrong place
+* z-index issues with toolboxes
 * ~~SVG logo is not rendering correctly in new vertical menu~~
 
 
