@@ -15,11 +15,13 @@ An **ALPHA** plugin which allows the user to have columns
 
 * [x] Support new vertical menu style
 * [x] Save/Load
-* [x] Support for == 2 colums
-* [x] Support for >= 3 columns
+* [x] Support for 2 colums
+* [x] Support for 3 columns
     * [x] Migrate storage to array
     * [x] Add tool to change type
     * [x] Added tool to switch/roll arrays
+* [ ] Refactor code for legibility
+* [ ] Tests
 
 
 # Known Bugs
