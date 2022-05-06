@@ -177,7 +177,52 @@
 
 <style>
 
-  /* // Some of these styles are important */
+/* REQUIRED STYLES */
+
+.ce-editorjsColumns_col{
+  flex: 50%;
+}
+
+.ce-editorjsColumns_wrapper{
+  display: flex;
+  width:100%;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.ce-block__content, 
+.ce-toolbar__content {
+  max-width: calc(100% - 50px);  /* example value, adjust for your own use case */
+}
+
+/*   */
+.ce-toolbar__actions{
+  right: calc(100% + 30px); 
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 4px;
+}
+
+/* Would be better to remove --narrow mode */
+/* Issue Raised */
+.codex-editor--narrow .codex-editor__redactor{
+  margin: 0;
+}
+
+/* Required to prevent clipping */
+.ce-toolbar{
+  z-index: 4;
+}
+
+
+/* OPTIONAL STYLES */
+
+.ce-editorjsColumns_col{
+  border: 1px solid #eee;
+  border-radius: 5px;
+  gap: 10px;
+  padding-top:10px;
+}
+
 
 .editorjs-wrapper{
   border: 1px solid #eee;
@@ -187,40 +232,11 @@
   box-shadow: 0 6px 18px #e8edfa80;
 }
 
-.ce-block__content, 
-.ce-toolbar__content {
-  max-width: calc(100% - 50px);  /* example value, adjust for your own use case */
-}
-
-.ce-toolbar__actions{
-  /* position: relative; */
-  right: calc(100% + 30px); 
-  background-color: rgba(255, 255, 255, 0.5);
-  border-radius: 4px;
-}
-
-.codex-editor--narrow .codex-editor__redactor{
-  margin: 0;
-}
-
-.ce-editorjsColumns_col{
-  border: 1px solid #eee;
-  border-radius: 5px;
-  flex: 50%;
-  gap: 10px;
-  padding-top:10px;
-}
 
 .ce-editorjsColumns_col:focus-within{
   box-shadow: 0 6px 18px #e8edfa80;
 }
 
-.ce-editorjsColumns_wrapper{
-  display: flex;
-  width:100%;
-  gap: 10px;
-  margin-bottom: 10px;
-}
 
 
 </style>
