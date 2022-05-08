@@ -1,6 +1,5 @@
 /**
- * Base Paragraph Note Block for the Editor.js.
- * Represents simple paragraph
+ * Column Block for the Editor.js.
  *
  * @author Calum Knott (calum@calumk.com)
  * @copyright Calum Knott
@@ -10,23 +9,20 @@
 /**
  * @typedef {Object} EditorJsColumnsData
  * @description Tool's input and output data format
- * @property {String} text — Paragraph's content. Can include HTML tags: <a><b><i>
  */
 
 // import EditorJS from '@editorjs/editorjs';
 import { v4 as uuidv4 } from "uuid";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
 import icon from "./editorjs-columns.svg";
 import style from "./editorjs-columns.css";
 
-
 class EditorJsColumns {
-	constructor({data, config, api, readOnly }) {
-
+	constructor({ data, config, api, readOnly }) {
 		this.api = api;
-    console.log(this.api)
-    console.log(data)
+		console.log(this.api);
+		console.log(data);
 		this.readOnly = readOnly;
 
 		this._CSS = {
@@ -42,9 +38,9 @@ class EditorJsColumns {
 		 * Placeholder for paragraph if it is first Block
 		 * @type {string}
 		 */
-		this._placeholder = config.placeholder
-			? config.placeholder
-			: EditorJsColumns.DEFAULT_PLACEHOLDER;
+		// this._placeholder = config.placeholder
+		// 	? config.placeholder
+		// 	: EditorJsColumns.DEFAULT_PLACEHOLDER;
 		this._data = {};
 		// this._element = this.drawView();
 
@@ -52,19 +48,16 @@ class EditorJsColumns {
 
 		this.colWrapper = undefined;
 
-		
 		this.editors.cols = [];
 
 		this.data = data;
 
 		if (!Array.isArray(this.data.cols)) {
 			this.data.cols = [];
-      this.editors.numberOfColumns = 2;
-		}else{
-      this.editors.numberOfColumns = this.data.cols.length
-    }
-
-    
+			this.editors.numberOfColumns = 2;
+		} else {
+			this.editors.numberOfColumns = this.data.cols.length;
+		}
 	}
 
 	static get isReadOnlySupported() {
@@ -97,7 +90,7 @@ class EditorJsColumns {
 			icon: `<div>3</div>`,
 		};
 
-    const buttonRollCols = {
+		const buttonRollCols = {
 			name: "Roll Cols",
 			icon: `<div>R</div>`,
 		};
@@ -112,7 +105,7 @@ class EditorJsColumns {
 		buttonThreeCols_Button.classList.add("cdx-settings-button");
 		buttonThreeCols_Button.innerHTML = buttonThreeCols.icon;
 
-    let buttonRollCols_Button = document.createElement("div");
+		let buttonRollCols_Button = document.createElement("div");
 		buttonRollCols_Button.classList.add("cdx-settings-button");
 		buttonRollCols_Button.innerHTML = buttonRollCols.icon;
 
@@ -124,44 +117,43 @@ class EditorJsColumns {
 			this._updateCols(3);
 		});
 
-    buttonRollCols_Button.addEventListener("click", (event) => {
+		buttonRollCols_Button.addEventListener("click", (event) => {
 			this._rollCols();
 		});
 
 		wrapper.appendChild(buttonTwoCols_Button);
 		wrapper.appendChild(buttonThreeCols_Button);
-    wrapper.appendChild(buttonRollCols_Button);
+		wrapper.appendChild(buttonRollCols_Button);
 
 		return wrapper;
 	}
 
-  _rollCols(){
-    this.data.cols.unshift(this.data.cols.pop())
-    this.editors.cols.unshift(this.editors.cols.pop())
-    this._rerender();
-  }
+	_rollCols() {
+		this.data.cols.unshift(this.data.cols.pop());
+		this.editors.cols.unshift(this.editors.cols.pop());
+		this._rerender();
+	}
 
 	async _updateCols(num) {
 		if (num == 2) {
-      if(this.editors.numberOfColumns == 3){
-        let resp = await Swal.fire({
-          title: 'Are you sure?',
-          text: "This will delete Column 3!",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, delete it!'
-        })
-        
-        if(resp.isConfirmed){
-          this.editors.numberOfColumns = 2;
-          this.data.cols.pop()
-          this.editors.cols.pop()
-          this._rerender();
-        }
-      }
+			if (this.editors.numberOfColumns == 3) {
+				let resp = await Swal.fire({
+					title: "Are you sure?",
+					text: "This will delete Column 3!",
+					icon: "warning",
+					showCancelButton: true,
+					confirmButtonColor: "#3085d6",
+					cancelButtonColor: "#d33",
+					confirmButtonText: "Yes, delete it!",
+				});
 
+				if (resp.isConfirmed) {
+					this.editors.numberOfColumns = 2;
+					this.data.cols.pop();
+					this.editors.cols.pop();
+					this._rerender();
+				}
+			}
 		}
 		if (num == 3) {
 			this.editors.numberOfColumns = 3;
@@ -170,28 +162,21 @@ class EditorJsColumns {
 		}
 	}
 
+	async _rerender() {
+		await this.save();
+		console.log(this.colWrapper);
 
-
-
-
-
-
-  async _rerender(){
-    await this.save()
-    console.log(this.colWrapper)
-
-    for (let index = 0; index < this.editors.cols.length; index++) {
+		for (let index = 0; index < this.editors.cols.length; index++) {
 			this.editors.cols[index].destroy();
 		}
-    this.editors.cols = [];
+		this.editors.cols = [];
 
-    this.colWrapper.innerHTML = ''
+		this.colWrapper.innerHTML = "";
 
-
-    console.log("Building the columns")
+		console.log("Building the columns");
 
 		for (let index = 0; index < this.editors.numberOfColumns; index++) {
-      console.log("Start column, ", index)
+			console.log("Start column, ", index);
 			let col = document.createElement("div");
 			col.classList.add("ce-editorjsColumns_col");
 			col.classList.add("editorjs_col_" + index);
@@ -212,16 +197,13 @@ class EditorJsColumns {
 			});
 
 			this.editors.cols.push(editorjs_instance);
-   
-  }
-
-}
-
+		}
+	}
 
 	render() {
 		console.log("Generating Wrapper");
 
-    console.log(this.api.blocks.getCurrentBlockIndex())
+		console.log(this.api.blocks.getCurrentBlockIndex());
 
 		this.colWrapper = document.createElement("div");
 		this.colWrapper.classList.add("ce-editorjsColumns_wrapper");
@@ -234,10 +216,10 @@ class EditorJsColumns {
 		this.editors.cols = []; //empty the array of editors
 		console.log(this.editors.cols);
 
-    console.log("Building the columns")
+		console.log("Building the columns");
 
 		for (let index = 0; index < this.editors.numberOfColumns; index++) {
-      console.log("Start column, ", index)
+			console.log("Start column, ", index);
 			let col = document.createElement("div");
 			col.classList.add("ce-editorjsColumns_col");
 			col.classList.add("editorjs_col_" + index);
@@ -258,25 +240,19 @@ class EditorJsColumns {
 			});
 
 			this.editors.cols.push(editorjs_instance);
-      console.log("End column, ", index)
+			console.log("End column, ", index);
 		}
 		return this.colWrapper;
 	}
 
-
-
-
-
-  async save() {
-    console.log("Saving")
-    for (let index = 0; index < this.editors.cols.length; index++) {
+	async save() {
+		console.log("Saving");
+		for (let index = 0; index < this.editors.cols.length; index++) {
 			let colData = await this.editors.cols[index].save();
-      this.data.cols[index] = colData
+			this.data.cols[index] = colData;
 		}
-    return this.data;
-  }
-
-
+		return this.data;
+	}
 
 	static get toolbox() {
 		return {

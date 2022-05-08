@@ -64,7 +64,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/marker@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/inline-code@latest"></script>
     
-
   
   <!-- Load Local Tools -->
     <script src="../dist/editorjs-columns.bundle.js"></script>
@@ -78,11 +77,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@calumk/editorjs-paragraph-linebreakable"></script>
 
 
-
-
   <!-- Load Editor.js's Core -->
   <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@codexteam/shortcuts@1.1.1/dist/shortcuts.min.js"></script>
+
 
   <!-- Initialization -->
   <script>
@@ -125,6 +122,7 @@
 
       onReady: function(){
         console.log("Delaying Save to launch Column Editors")
+        
         setTimeout(() => {
           saveButton.click();
         },2000)
@@ -135,17 +133,6 @@
         // console.log('something changed');
       }
     });
-
-    let cmdA = new Shortcut({
-    name : 'ENTER',
-    on : document.body,
-    callback: function(event) {
-        // your handler
-        console.log("TEST")
-        console.log(event)
-        // event.preventDefault();
-      }
-  });
 
 
     // Buttons
@@ -180,21 +167,12 @@
 
 
 
-
-
-
-
-
 /* OPTIONAL STYLES */
 
-.ce-editorjsColumns_col{
-  border: 1px solid #eee;
-  border-radius: 5px;
-  gap: 10px;
-  padding-top:10px;
-}
+/* 
+These styles are not reqired, they do not enforce the column layout, but do add some opinionated styling
 
-
+*/
 .editorjs-wrapper{
   border: 1px solid #eee;
   border-radius: 5px;
@@ -203,6 +181,12 @@
   box-shadow: 0 6px 18px #e8edfa80;
 }
 
+.ce-editorjsColumns_col{
+  border: 1px solid #eee;
+  border-radius: 5px;
+  gap: 10px;
+  padding-top:10px;
+}
 
 .ce-editorjsColumns_col:focus-within{
   box-shadow: 0 6px 18px #e8edfa80;
