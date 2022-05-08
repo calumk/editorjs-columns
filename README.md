@@ -31,11 +31,11 @@ An **ALPHA** plugin which allows the user to have columns
     * Can be solved (sort-of) by using @calumk/editorjs-paragraph-linebreakable
 * Pressing tab key inside column will launch both column, and parent tools
 * Copy/Pasting can cause duplication of data in the wrong place
-* z-index issues with toolboxes
+* ~~z-index issues with toolboxes~~
 * Tools are hosted as global var
-* All Styling is currently only in the example.html
-    * Column styling should move to plugin
-    * Opinionaited styling (Borders, rounded corners, hover shaddow) will remain in example.html
+* ~~All Styling is currently only in the example.html~~
+    * ~~Column styling should move to plugin~~
+    * ~~Opinionaited styling (Borders, rounded corners, hover shaddow) will remain in example.html~~
 * ~~SVG logo is not rendering correctly in new vertical menu~~
 
 

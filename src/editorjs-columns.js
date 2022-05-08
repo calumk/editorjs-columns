@@ -18,6 +18,7 @@ import { v4 as uuidv4 } from "uuid";
 import Swal from 'sweetalert2'
 
 import icon from "./editorjs-columns.svg";
+import style from "./editorjs-columns.css";
 
 
 class EditorJsColumns {
