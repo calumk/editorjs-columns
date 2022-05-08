@@ -4,7 +4,11 @@ An **ALPHA** plugin which allows the user to have columns
 
 ## Installation
 
-> NPM : Todo
+
+> npm i @calumk/editorjs-columns
+
+
+> https://cdn.jsdelivr.net/npm/@calumk/editorjs-columns@latest
 
 
 ## Demo
