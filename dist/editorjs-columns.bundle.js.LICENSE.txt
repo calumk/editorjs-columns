@@ -1,6 +1,5 @@
 /**
- * Base Paragraph Note Block for the Editor.js.
- * Represents simple paragraph
+ * Column Block for the Editor.js.
  *
  * @author Calum Knott (calum@calumk.com)
  * @copyright Calum Knott
