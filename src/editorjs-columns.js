@@ -246,10 +246,12 @@ class EditorJsColumns {
 	}
 
 	async save() {
-		console.log("Saving");
-		for (let index = 0; index < this.editors.cols.length; index++) {
-			let colData = await this.editors.cols[index].save();
-			this.data.cols[index] = colData;
+		if(!this.readOnly){
+			console.log("Saving");
+			for (let index = 0; index < this.editors.cols.length; index++) {
+				let colData = await this.editors.cols[index].save();
+				this.data.cols[index] = colData;
+			}
 		}
 		return this.data;
 	}

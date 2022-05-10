@@ -1,6 +1,6 @@
 # @calumk/editorjs-Columns
 
-An **ALPHA** plugin which allows the user to have columns
+A **BETA** plugin which allows the user to have columns
 
 ## Installation
 
