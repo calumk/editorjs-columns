@@ -21,8 +21,8 @@ import style from "./editorjs-columns.css";
 class EditorJsColumns {
 	constructor({ data, config, api, readOnly }) {
 		this.api = api;
-		console.log(this.api);
-		console.log(data);
+		// console.log(this.api);
+		// console.log(data);
 		this.readOnly = readOnly;
 
 		this._CSS = {
@@ -201,9 +201,9 @@ class EditorJsColumns {
 	}
 
 	render() {
-		console.log("Generating Wrapper");
+		// console.log("Generating Wrapper");
 
-		console.log(this.api.blocks.getCurrentBlockIndex());
+		// console.log(this.api.blocks.getCurrentBlockIndex());
 
 		this.colWrapper = document.createElement("div");
 		this.colWrapper.classList.add("ce-editorjsColumns_wrapper");
@@ -212,20 +212,20 @@ class EditorJsColumns {
 			this.editors.cols[index].destroy();
 		}
 
-		console.log(this.editors.cols);
+		// console.log(this.editors.cols);
 		this.editors.cols = []; //empty the array of editors
-		console.log(this.editors.cols);
+		// console.log(this.editors.cols);
 
-		console.log("Building the columns");
+		// console.log("Building the columns");
 
 		for (let index = 0; index < this.editors.numberOfColumns; index++) {
-			console.log("Start column, ", index);
+			// console.log("Start column, ", index);
 			let col = document.createElement("div");
 			col.classList.add("ce-editorjsColumns_col");
 			col.classList.add("editorjs_col_" + index);
 
 			let editor_col_id = uuidv4();
-			console.log("generating: ", editor_col_id);
+			// console.log("generating: ", editor_col_id);
 			col.id = editor_col_id;
 
 			this.colWrapper.appendChild(col);
@@ -240,14 +240,14 @@ class EditorJsColumns {
 			});
 
 			this.editors.cols.push(editorjs_instance);
-			console.log("End column, ", index);
+			// console.log("End column, ", index);
 		}
 		return this.colWrapper;
 	}
 
 	async save() {
 		if(!this.readOnly){
-			console.log("Saving");
+			// console.log("Saving");
 			for (let index = 0; index < this.editors.cols.length; index++) {
 				let colData = await this.editors.cols[index].save();
 				this.data.cols[index] = colData;
