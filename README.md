@@ -2,6 +2,8 @@
 
 A **BETA** plugin which allows the user to have columns
 
+> Pull requests welcomed!
+
 ## Installation
 
 
