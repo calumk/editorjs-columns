@@ -54,11 +54,36 @@ None yet, see example/example.html for useage.
 
 ---
 
-> Note : Currently Requires tools to be bound to global variable, so the same tools can be accessed in nested instance - This will likley change to a config var
+> Note : Tools are passed to editorjs-columns using config.tools property
 
-```
-window.editorjs_global_tools = {
+```javascript
+// first define the tools to be made avaliable in the columns
+let column_tools = {
     header: Header,
-    delimiter: Delimiter,
-    image: SimpleImage,
+    alert : Alert,
+    paragraph : editorjsParagraphLinebreakable,
+    delimiter : Delimiter
 }
+
+// next define the tools in the main block
+// Warning - Dont just use main_tools - you will probably generate a circular reference 
+let main_tools = {
+// Load Official Tools
+    header: Header,
+    alert : Alert,
+    paragraph : editorjsParagraphLinebreakable,
+    delimiter : Delimiter,
+
+    columns : {
+        class : editorjsColumns,
+        config : {
+            tools : column_tools // ref the column_tools
+        }
+    },
+}
+
+
+editor = new EditorJS({
+    tools : main_tools,
+});
+```
