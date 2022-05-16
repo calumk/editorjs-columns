@@ -76,46 +76,43 @@ let example_data = {
             "data" : {
                 "cols" : [
                     {
-                        "time" : 1651768239769,
+                        "time" : 1652191341357,
                         "blocks" : [
                             {
-                                "id" : "N91WwFupMx",
-                                "type" : "alert",
+                                "id" : "oRxIvvV0BU",
+                                "type" : "paragraph",
                                 "data" : {
-                                    "type" : "info",
-                                    "message" : "Column A"
+                                    "text" : "A"
                                 }
                             }
                         ],
-                        "version" : "2.24.2"
+                        "version" : "2.24.3"
                     },
                     {
-                        "time" : 1651768239769,
+                        "time" : 1652191341357,
                         "blocks" : [
                             {
-                                "id" : "PH14ZzqL4H",
-                                "type" : "alert",
+                                "id" : "a9taH31sEo",
+                                "type" : "paragraph",
                                 "data" : {
-                                    "type" : "success",
-                                    "message" : "Column B"
+                                    "text" : "B"
                                 }
                             }
                         ],
-                        "version" : "2.24.2"
+                        "version" : "2.24.3"
                     },
                     {
-                        "time" : 1651768239770,
+                        "time" : 1652191341357,
                         "blocks" : [
                             {
-                                "id" : "a24WHI-q69",
-                                "type" : "alert",
+                                "id" : "zJFadDCEbd",
+                                "type" : "paragraph",
                                 "data" : {
-                                    "type" : "danger",
-                                    "message" : "Column C"
+                                    "text" : "C"
                                 }
                             }
                         ],
-                        "version" : "2.24.2"
+                        "version" : "2.24.3"
                     }
                 ]
             }

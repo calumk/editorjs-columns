@@ -65,8 +65,8 @@ class EditorJsColumns {
 	}
 
 	onKeyUp(e) {
-		console.log("ku");
-		console.log(e);
+		// console.log("ku");
+		// console.log(e);
 		if (e.code !== "Backspace" && e.code !== "Delete") {
 			return;
 		}
@@ -158,13 +158,13 @@ class EditorJsColumns {
 		if (num == 3) {
 			this.editors.numberOfColumns = 3;
 			this._rerender();
-			console.log(3);
+			// console.log(3);
 		}
 	}
 
 	async _rerender() {
 		await this.save();
-		console.log(this.colWrapper);
+		// console.log(this.colWrapper);
 
 		for (let index = 0; index < this.editors.cols.length; index++) {
 			this.editors.cols[index].destroy();
@@ -173,16 +173,16 @@ class EditorJsColumns {
 
 		this.colWrapper.innerHTML = "";
 
-		console.log("Building the columns");
+		// console.log("Building the columns");
 
 		for (let index = 0; index < this.editors.numberOfColumns; index++) {
-			console.log("Start column, ", index);
+			// console.log("Start column, ", index);
 			let col = document.createElement("div");
 			col.classList.add("ce-editorjsColumns_col");
 			col.classList.add("editorjs_col_" + index);
 
 			let editor_col_id = uuidv4();
-			console.log("generating: ", editor_col_id);
+			// console.log("generating: ", editor_col_id);
 			col.id = editor_col_id;
 
 			this.colWrapper.appendChild(col);
