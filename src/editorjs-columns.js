@@ -11,7 +11,6 @@
  * @description Tool's input and output data format
  */
 
-// import EditorJS from '@editorjs/editorjs';
 import { v4 as uuidv4 } from "uuid";
 import Swal from "sweetalert2";
 
@@ -21,9 +20,11 @@ import style from "./editorjs-columns.css";
 class EditorJsColumns {
 	constructor({ data, config, api, readOnly }) {
 		this.api = api;
-		// console.log(this.api);
-		// console.log(data);
 		this.readOnly = readOnly;
+		this.config = config || {};
+		// console.log("HELLO")
+		// console.log(this.config)
+		// this.config.tools
 
 		this._CSS = {
 			block: this.api.styles.block,
@@ -34,15 +35,8 @@ class EditorJsColumns {
 			this.onKeyUp = this.onKeyUp.bind(this);
 		}
 
-		/**
-		 * Placeholder for paragraph if it is first Block
-		 * @type {string}
-		 */
-		// this._placeholder = config.placeholder
-		// 	? config.placeholder
-		// 	: EditorJsColumns.DEFAULT_PLACEHOLDER;
+
 		this._data = {};
-		// this._element = this.drawView();
 
 		this.editors = {};
 
@@ -64,9 +58,8 @@ class EditorJsColumns {
 		return true;
 	}
 
+
 	onKeyUp(e) {
-		// console.log("ku");
-		// console.log(e);
 		if (e.code !== "Backspace" && e.code !== "Delete") {
 			return;
 		}
@@ -135,6 +128,7 @@ class EditorJsColumns {
 	}
 
 	async _updateCols(num) {
+		// Should probably update to make number dynamic... but this will do for now
 		if (num == 2) {
 			if (this.editors.numberOfColumns == 3) {
 				let resp = await Swal.fire({
@@ -190,7 +184,7 @@ class EditorJsColumns {
 			let editorjs_instance = new EditorJS({
 				defaultBlock: "paragraph",
 				holder: editor_col_id,
-				tools: window.editorjs_global_tools,
+				tools: this.config.tools,
 				data: this.data.cols[index],
 				readOnly: this.readOnly,
 				minHeight: 50,
@@ -233,7 +227,7 @@ class EditorJsColumns {
 			let editorjs_instance = new EditorJS({
 				defaultBlock: "paragraph",
 				holder: editor_col_id,
-				tools: window.editorjs_global_tools,
+				tools: this.config.tools,
 				data: this.data.cols[index],
 				readOnly: this.readOnly,
 				minHeight: 50,

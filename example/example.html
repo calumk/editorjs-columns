@@ -84,39 +84,38 @@
   <!-- Initialization -->
   <script>
 
-    window.editorjs_global_tools = {
+    // first define the tools to be made avaliable in the columns
+    let column_tools = {
+      header: Header,
+      alert : Alert,
+      paragraph : editorjsParagraphLinebreakable,
+      delimiter : Delimiter
+    }
+
+    // next define the tools in the main block
+    // Warning - Dont just use main_tools - you will probably generate a circular reference 
+    let main_tools = {
 
     // Load Official Tools
       header: Header,
-      delimiter: Delimiter,
-      image: SimpleImage,
-      // checklist: Checklist,
-      list: editorjsNestedChecklist,
-      quote: Quote,
-      code : editorjsCodeflask,
-      embed: Embed,
-      table: Table,
-      linkTool: LinkTool,
-      // warning: Warning,
-      marker: Marker,
-      // inlineCode:,
-
-    // Load Local Tools
-      // markdownimporter: editorjsMarkdownImporter,
-      // markdownexporter: editorjsMarkdownExporter,
-      columns : editorjsColumns,
-
-    // Load 3rd Party Tools
       alert : Alert,
+      paragraph : editorjsParagraphLinebreakable,
+      delimiter : Delimiter,
 
-      paragraph : editorjsParagraphLinebreakable
+      columns : {
+        class : editorjsColumns,
+        config : {
+          tools : column_tools // ref the column_tools
+        }
+      },
+    }
 
-    },
+    
 
     editor = new EditorJS({
       readOnly: false,
       holder: 'editorjs',
-      tools : window.editorjs_global_tools,
+      tools : main_tools,
       data: example_data, // Imported from example_data.js
 
 
