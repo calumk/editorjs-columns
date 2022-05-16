@@ -30,6 +30,9 @@ A **BETA** plugin which allows the user to have columns
 * [ ] Tests
 
 
+## ChangeLog
+16/05/22 - Removed global tool varable. Switched to config variable for column tools (see Example)
+
 
 
 # Known Bugs
@@ -38,7 +41,7 @@ A **BETA** plugin which allows the user to have columns
 * Pressing tab key inside column will launch both column, and parent tools
 * Copy/Pasting can cause duplication of data in the wrong place
 * ~~z-index issues with toolboxes~~
-* Tools are hosted as global var
+* ~~Tools are hosted as global var~~
 * ~~All Styling is currently only in the example.html~~
     * ~~Column styling should move to plugin~~
     * ~~Opinionaited styling (Borders, rounded corners, hover shaddow) will remain in example.html~~
