@@ -11,6 +11,7 @@
   "author": "Calum Knott",
   "license": "MIT",
   "dependencies": {
+    "@editorjs/editorjs": "^2.24.3",
     "sweetalert2": "^11.4.10",
     "uuid": "^8.3.2"
   },
