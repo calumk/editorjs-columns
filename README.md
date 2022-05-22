@@ -29,10 +29,10 @@ A **BETA** plugin which allows the user to have columns
 * [ ] Refactor code for legibility
 * [ ] Tests
 
+## Changelog 
 
-## ChangeLog
-16/05/22 - Removed global tool varable. Switched to config variable for column tools (see Example)
-
+> 16/05/22 - Removed global tool varable. Switched to config variable for column tools (see Example)
+> 22/05/22 - EditorJs must now be passed as instance through tool to child, to avoid duplicate editorjs installs
 
 
 # Known Bugs
@@ -77,9 +77,10 @@ let main_tools = {
     columns : {
         class : editorjsColumns,
         config : {
-            tools : column_tools // ref the column_tools
+          tools : column_tools, // IMPORTANT! ref the column_tools
+          EditorJsLibrary : EditorJS // IMPORTANT! ref the EditorJS Instance
         }
-    },
+      },
 }
 
 

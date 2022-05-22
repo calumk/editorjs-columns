@@ -25,6 +25,7 @@ class EditorJsColumns {
 		// console.log("HELLO")
 		// console.log(this.config)
 		// this.config.tools
+		// this.config.EditorJsLibrary !IMPORTANT
 
 		this._CSS = {
 			block: this.api.styles.block,
@@ -181,7 +182,7 @@ class EditorJsColumns {
 
 			this.colWrapper.appendChild(col);
 
-			let editorjs_instance = new EditorJS({
+			let editorjs_instance = new this.config.EditorJsLibrary({
 				defaultBlock: "paragraph",
 				holder: editor_col_id,
 				tools: this.config.tools,
@@ -224,7 +225,7 @@ class EditorJsColumns {
 
 			this.colWrapper.appendChild(col);
 
-			let editorjs_instance = new EditorJS({
+			let editorjs_instance = new this.config.EditorJsLibrary({
 				defaultBlock: "paragraph",
 				holder: editor_col_id,
 				tools: this.config.tools,
