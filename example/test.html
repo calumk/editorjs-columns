@@ -51,6 +51,8 @@
   <!-- Load Official Tools -->
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/delimiter@latest"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/paragraph@latest"></script>
     
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/simple-image@latest"></script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/@editorjs/checklist@latest"></script> -->
@@ -74,7 +76,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@calumk/editorjs-codeflask@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/@calumk/editorjs-nested-checklist@latest"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/@calumk/editorjs-paragraph-linebreakable"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@calumk/editorjs-paragraph-linebreakable"></script> -->
+    <script src="../extra/editorjs-paragraph-linebreakable.bundle.js"></script>
 
 
   <!-- Load Editor.js's Core -->
@@ -88,7 +91,7 @@
     let column_tools = {
       header: Header,
       alert : Alert,
-      paragraph : editorjsParagraphLinebreakable,
+      paragraph : {class: editorjsParagraphLinebreakable, inlineToolbar: true},
       delimiter : Delimiter
     }
 
@@ -99,7 +102,7 @@
     // Load Official Tools
       header: Header,
       alert : Alert,
-      paragraph : editorjsParagraphLinebreakable,
+      paragraph : {class: editorjsParagraphLinebreakable, inlineToolbar: true},
       delimiter : Delimiter,
 
       columns : {
@@ -158,7 +161,6 @@
 
       readOnlyIndicator.textContent = readOnlyState ? 'On' : 'Off';
     });
-
 
   </script>
 

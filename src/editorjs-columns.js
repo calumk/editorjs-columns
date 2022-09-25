@@ -21,13 +21,10 @@ import EditorJS from '@editorjs/editorjs'; // required for npm mode
 
 class EditorJsColumns {
 	constructor({ data, config, api, readOnly }) {
+		// start by setting up the required parts
 		this.api = api;
 		this.readOnly = readOnly;
 		this.config = config || {};
-		// console.log("HELLO")
-		// console.log(this.config)
-		// this.config.tools
-		// this.config.EditorJsLibrary !IMPORTANT
 
 		this._CSS = {
 			block: this.api.styles.block,
@@ -55,6 +52,7 @@ class EditorJsColumns {
 		} else {
 			this.editors.numberOfColumns = this.data.cols.length;
 		}
+
 	}
 
 	static get isReadOnlySupported() {
@@ -63,6 +61,8 @@ class EditorJsColumns {
 
 
 	onKeyUp(e) {
+		console.log(e)
+		console.log("heyup")
 		if (e.code !== "Backspace" && e.code !== "Delete") {
 			return;
 		}
@@ -125,6 +125,7 @@ class EditorJsColumns {
 	}
 
 	_rollCols() {
+		// this shifts or "rolls" the columns
 		this.data.cols.unshift(this.data.cols.pop());
 		this.editors.cols.unshift(this.editors.cols.pop());
 		this._rerender();
@@ -198,6 +199,41 @@ class EditorJsColumns {
 	}
 
 	render() {
+
+		// This is needed to prevent the enter / tab keys - it globally removes them!!!
+
+
+		// it runs MULTIPLE times. - this is not good, but works for now
+		window.helpme = document.addEventListener('keydown', function(event) {
+
+			// if (event.key === "Enter" && event.altKey) {
+			// 	console.log("ENTER ALT Captured")
+			// 	console.log(event.target)
+
+			// 	// let b = event.target.dispatchEvent(new KeyboardEvent('keyup',{'key':'a'}));
+
+			// 	event.target.innerText += "Aß"
+
+			// 	// console.log(b)
+			// }
+			// else 
+			if (event.key === "Enter") {
+				event.stopImmediatePropagation();
+				event.preventDefault();
+				console.log("ENTER Captured")
+			}
+			if (event.key === "Tab") {
+				event.stopImmediatePropagation();
+				event.preventDefault();
+				console.log("TAB Captured")
+			}
+		}, true);
+
+
+
+
+
+
 		// console.log("Generating Wrapper");
 
 		// console.log(this.api.blocks.getCurrentBlockIndex());

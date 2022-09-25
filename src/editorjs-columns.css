@@ -19,6 +19,10 @@ These styles will also affect the parent editor!!!!!!
 
 */
 
+.ce-inline-toolbar{
+  z-index:1000
+}
+
 .ce-block__content, 
 .ce-toolbar__content {
   max-width: calc(100% - 50px);  /* example value, adjust for your own use case */
@@ -33,6 +37,7 @@ These styles will also affect the parent editor!!!!!!
 
 /* Would be better to remove --narrow mode */
 /* Issue Raised */
+/* // This causes an error which is good i think? */
 .codex-editor--narrow .codex-editor__redactor{
   margin: 0;
 }
@@ -40,5 +45,10 @@ These styles will also affect the parent editor!!!!!!
 /* Required to prevent clipping */
 .ce-toolbar{
   z-index: 4;
+}
+
+.codex-editor{
+  /* background:#f00 !important; */
+  z-index: auto !important; 
 }
 
