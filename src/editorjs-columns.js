@@ -19,6 +19,8 @@ import style from "./editorjs-columns.css";
 
 import EditorJS from '@editorjs/editorjs'; // required for npm mode
 
+const MAX_SPAN = 12;
+
 class EditorJsColumns {
 	constructor({ data, config, api, readOnly }) {
 		// start by setting up the required parts
@@ -49,10 +51,15 @@ class EditorJsColumns {
 		if (!Array.isArray(this.data.cols)) {
 			this.data.cols = [];
 			this.editors.numberOfColumns = 2;
+      
 		} else {
-			this.editors.numberOfColumns = this.data.cols.length;
+			
+      this.editors.numberOfColumns = this.data.cols.length;
+      
+      
 		}
-
+    var n = this.data.cols.length || 2;
+    this.editors.spanOfColumns =  [...Array(n).keys()].map(x=>MAX_SPAN/n);
 	}
 
 	static get isReadOnlySupported() {
@@ -91,6 +98,11 @@ class EditorJsColumns {
 			icon: `<div>R</div>`,
 		};
 
+		const buttonWidenCols = {
+			name: "Widen Cols",
+			icon: `<div>W</div>`,
+		};
+
 		const wrapper = document.createElement("div");
 
 		let buttonTwoCols_Button = document.createElement("div");
@@ -105,6 +117,11 @@ class EditorJsColumns {
 		buttonRollCols_Button.classList.add("cdx-settings-button");
 		buttonRollCols_Button.innerHTML = buttonRollCols.icon;
 
+
+    let buttonWidenCols_Button = document.createElement("div");
+		buttonWidenCols_Button.classList.add("cdx-settings-button");
+		buttonWidenCols_Button.innerHTML = buttonWidenCols.icon;
+
 		buttonTwoCols_Button.addEventListener("click", (event) => {
 			this._updateCols(2);
 		});
@@ -116,10 +133,15 @@ class EditorJsColumns {
 		buttonRollCols_Button.addEventListener("click", (event) => {
 			this._rollCols();
 		});
+    
+    buttonWidenCols_Button.addEventListener("click", (event) => {
+			this._widenCols();
+		});
 
 		wrapper.appendChild(buttonTwoCols_Button);
 		wrapper.appendChild(buttonThreeCols_Button);
 		wrapper.appendChild(buttonRollCols_Button);
+    wrapper.appendChild(buttonWidenCols_Button);
 
 		return wrapper;
 	}
@@ -159,10 +181,35 @@ class EditorJsColumns {
 			// console.log(3);
 		}
 	}
+  
+  
+  async _widenCols() {
+		
+		if (this.editors.numberOfColumns == 2) {
+				  var [s1, s2] = this.editors.spanOfColumns;
+          s1+=1;
+          if (s1>11) s1=1;
+          s2 = MAX_SPAN - s1;
+					this.editors.spanOfColumns = [s1, s2];
+					this._rerender();
+				
+		} else if (this.editors.numberOfColumns == 3) {
+          var [s1, s2, s3] = this.editors.spanOfColumns;
+          s1+=1;
+          if (s1>10) s1=1;
+          s2 = parseInt((MAX_SPAN - s1)/2);
+          s3 = MAX_SPAN - s1 - s2;
+
+					this.editors.spanOfColumns = [s1, s2, s3];
+					
+          this._rerender();
+			
+		}
+	}
 
 	async _rerender() {
 		await this.save();
-		// console.log(this.colWrapper);
+		
 
 		for (let index = 0; index < this.editors.cols.length; index++) {
 			this.editors.cols[index].destroy();
@@ -171,16 +218,19 @@ class EditorJsColumns {
 
 		this.colWrapper.innerHTML = "";
 
-		// console.log("Building the columns");
+		
 
 		for (let index = 0; index < this.editors.numberOfColumns; index++) {
-			// console.log("Start column, ", index);
+			
 			let col = document.createElement("div");
 			col.classList.add("ce-editorjsColumns_col");
 			col.classList.add("editorjs_col_" + index);
+      col.classList.add(`ce-editorjsColumns_span-${this.editors.spanOfColumns[index]}`);
+      
+      
 
 			let editor_col_id = uuidv4();
-			// console.log("generating: ", editor_col_id);
+			
 			col.id = editor_col_id;
 
 			this.colWrapper.appendChild(col);
@@ -256,6 +306,7 @@ class EditorJsColumns {
 			let col = document.createElement("div");
 			col.classList.add("ce-editorjsColumns_col");
 			col.classList.add("editorjs_col_" + index);
+      col.classList.add(`ce-editorjsColumns_span-${this.editors.spanOfColumns[index]}`);
 
 			let editor_col_id = uuidv4();
 			// console.log("generating: ", editor_col_id);
@@ -273,6 +324,8 @@ class EditorJsColumns {
 			});
 
 			this.editors.cols.push(editorjs_instance);
+      var n = this.data.cols.length || 2;
+      this.editors.spanOfColumns = [...Array(n).keys()].map(x=>MAX_SPAN/n);
 			// console.log("End column, ", index);
 		}
 		return this.colWrapper;
@@ -282,10 +335,14 @@ class EditorJsColumns {
 		if(!this.readOnly){
 			// console.log("Saving");
 			for (let index = 0; index < this.editors.cols.length; index++) {
-				let colData = await this.editors.cols[index].save();
+        let colData = await this.editors.cols[index].save();
 				this.data.cols[index] = colData;
+        
+        
 			}
 		}
+    this.data.spans=this.editors.spanOfColumns
+    console.log("reporttest saving return ", this.data)
 		return this.data;
 	}
 

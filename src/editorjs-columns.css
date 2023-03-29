@@ -52,3 +52,63 @@ These styles will also affect the parent editor!!!!!!
   z-index: auto !important; 
 }
 
+
+.ce-editorjsColumns_span-1 {
+  flex: 0 0 auto;
+  width:8.333333333%;
+}
+
+.ce-editorjsColumns_span-2 {
+  flex: 0 0 auto;
+  width:16.666666667%;
+}
+
+.ce-editorjsColumns_span-3 {
+  flex: 0 0 auto;
+  width:25%;
+}
+
+.ce-editorjsColumns_span-4 {
+  flex: 0 0 auto;
+  width:33.333333333%;
+}
+
+
+.ce-editorjsColumns_span-5 {
+  flex: 0 0 auto;
+  width:41.666666667%;
+}
+
+.ce-editorjsColumns_span-6 {
+  flex: 0 0 auto;
+  width:50%;
+}
+
+.ce-editorjsColumns_span-7 {
+  flex: 0 0 auto;
+  width:58.333333333%;
+}
+
+.ce-editorjsColumns_span-8 {
+  flex: 0 0 auto;
+  width:66.666666667%;
+}
+.ce-editorjsColumns_span-9 {
+  flex: 0 0 auto;
+  width:75%;
+}
+.ce-editorjsColumns_span-10 {
+  flex: 0 0 auto;
+  width:83.333333333%;
+}
+.ce-editorjsColumns_span-11 {
+  flex: 0 0 auto;
+  width:91.666666667%;
+}
+
+.ce-editorjsColumns_span-12 {
+  flex: 0 0 auto;
+  width:100%;
+}
+
+
