@@ -5,12 +5,40 @@
   flex: 50%;
 }
 
+
+
+
 .ce-editorjsColumns_wrapper{
   display: flex;
   width:100%;
   gap: 10px;
   margin-bottom: 10px;
+  flex-direction: row;
+
+  .ce-toolbar__actions{
+    z-index:0;
+  }
+
+  .ce-toolbar{
+    z-index: 4;
+  }
+
+  .ce-popover{
+    z-index: 4000;
+  }
+
+  
 }
+
+@media (max-width: 800px) {
+  .ce-editorjsColumns_wrapper {
+    flex-direction: column;
+    padding:10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+}
+
 
 
 /* 

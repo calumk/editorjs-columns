@@ -11,15 +11,17 @@
   "author": "Calum Knott",
   "license": "MIT",
   "dependencies": {
-    "@editorjs/editorjs": "^2.24.3",
+    "@editorjs/editorjs": "^2.26.5",
     "sweetalert2": "^11.4.10",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
     "css-loader": "^6.7.1",
+    "sass": "^1.55.0",
+    "sass-loader": "^13.0.2",
     "style-loader": "^3.3.1",
     "svg-inline-loader": "^0.8.2",
-    "webpack": "^5.72.0",
+    "webpack": "^5.74.0",
     "webpack-cli": "^4.9.2"
   }
 }

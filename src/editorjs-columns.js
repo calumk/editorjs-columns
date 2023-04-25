@@ -15,12 +15,20 @@ import { v4 as uuidv4 } from "uuid";
 import Swal from "sweetalert2";
 
 import icon from "./editorjs-columns.svg";
-import style from "./editorjs-columns.css";
+import style from "./editorjs-columns.scss";
 
 import EditorJS from '@editorjs/editorjs'; // required for npm mode
 
 class EditorJsColumns {
+
+	static get enableLineBreaks() {
+		return true;
+	}
+
+
 	constructor({ data, config, api, readOnly }) {
+		// console.log("API")
+		// console.log(api)
 		// start by setting up the required parts
 		this.api = api;
 		this.readOnly = readOnly;
@@ -75,54 +83,27 @@ class EditorJsColumns {
 		};
 	}
 
+
 	renderSettings() {
-		const buttonTwoCols = {
-			name: "Two Cols",
-			icon: `<div>2</div>`,
-		};
-
-		const buttonThreeCols = {
-			name: "Three Cols",
-			icon: `<div>3</div>`,
-		};
-
-		const buttonRollCols = {
-			name: "Roll Cols",
-			icon: `<div>R</div>`,
-		};
-
-		const wrapper = document.createElement("div");
-
-		let buttonTwoCols_Button = document.createElement("div");
-		buttonTwoCols_Button.classList.add("cdx-settings-button");
-		buttonTwoCols_Button.innerHTML = buttonTwoCols.icon;
-
-		let buttonThreeCols_Button = document.createElement("div");
-		buttonThreeCols_Button.classList.add("cdx-settings-button");
-		buttonThreeCols_Button.innerHTML = buttonThreeCols.icon;
-
-		let buttonRollCols_Button = document.createElement("div");
-		buttonRollCols_Button.classList.add("cdx-settings-button");
-		buttonRollCols_Button.innerHTML = buttonRollCols.icon;
-
-		buttonTwoCols_Button.addEventListener("click", (event) => {
-			this._updateCols(2);
-		});
-
-		buttonThreeCols_Button.addEventListener("click", (event) => {
-			this._updateCols(3);
-		});
-
-		buttonRollCols_Button.addEventListener("click", (event) => {
-			this._rollCols();
-		});
-
-		wrapper.appendChild(buttonTwoCols_Button);
-		wrapper.appendChild(buttonThreeCols_Button);
-		wrapper.appendChild(buttonRollCols_Button);
-
-		return wrapper;
+		return [
+			{
+				icon : "2",
+				label : "2 Columns",
+				onActivate : () => {this._updateCols(2)}
+			},
+			{
+				icon : "3",
+				label : "3 Columns",
+				onActivate : () => {this._updateCols(3)}
+			},
+			{
+				icon : "R",
+				label : "Roll Colls",
+				onActivate : () => {this._rollCols()}
+			},
+			]
 	}
+
 
 	_rollCols() {
 		// this shifts or "rolls" the columns
@@ -203,8 +184,23 @@ class EditorJsColumns {
 		// This is needed to prevent the enter / tab keys - it globally removes them!!!
 
 
-		// it runs MULTIPLE times. - this is not good, but works for now
-		window.helpme = document.addEventListener('keydown', function(event) {
+		// // it runs MULTIPLE times. - this is not good, but works for now
+
+
+
+
+
+
+		// console.log("Generating Wrapper");
+
+		// console.log(this.api.blocks.getCurrentBlockIndex());
+
+		this.colWrapper = document.createElement("div");
+		this.colWrapper.classList.add("ce-editorjsColumns_wrapper");
+
+
+
+		this.colWrapper.addEventListener('keydown', (event) => {
 
 			// if (event.key === "Enter" && event.altKey) {
 			// 	console.log("ENTER ALT Captured")
@@ -218,28 +214,29 @@ class EditorJsColumns {
 			// }
 			// else 
 			if (event.key === "Enter") {
-				event.stopImmediatePropagation();
 				event.preventDefault();
-				console.log("ENTER Captured")
+				event.stopImmediatePropagation();
+				event.stopPropagation();
+				
+				// console.log("ENTER Captured")
+				// this.api.blocks.insertNewBlock({type : "alert"});
+				// console.log("Added Block")
 			}
 			if (event.key === "Tab") {
-				event.stopImmediatePropagation();
+				// event.stopImmediatePropagation();
 				event.preventDefault();
-				console.log("TAB Captured")
+				event.stopImmediatePropagation();
+				event.stopPropagation();
+				
+				
+
+				// console.log("TAB Captured")
 			}
-		}, true);
+		});
 
 
 
 
-
-
-		// console.log("Generating Wrapper");
-
-		// console.log(this.api.blocks.getCurrentBlockIndex());
-
-		this.colWrapper = document.createElement("div");
-		this.colWrapper.classList.add("ce-editorjsColumns_wrapper");
 
 		for (let index = 0; index < this.editors.cols.length; index++) {
 			this.editors.cols[index].destroy();
