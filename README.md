@@ -33,6 +33,7 @@ A **BETA** plugin which allows the user to have columns
 
 ## ChangeLog
 
+> 28/04/23 - Re-added feature - EditorJs must now be passed as instance through tool to child, to avoid duplicate editorjs installs, and ensure only one editor js instance is used.
 > 16/05/22 - Removed global tool varable. Switched to config variable for column tools (see Example)
 > ~~22/05/22 - EditorJs must now be passed as instance through tool to child, to avoid duplicate editorjs installs~~ - Rolled Back 
 
@@ -78,6 +79,7 @@ let main_tools = {
 
     columns : {
         class : editorjsColumns,
+        EditorJsLibrary : EditorJs // Pass the library instance to the columns instance.
         config : {
           tools : column_tools, // IMPORTANT! ref the column_tools
         }

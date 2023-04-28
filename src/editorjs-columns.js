@@ -17,7 +17,7 @@ import Swal from "sweetalert2";
 import icon from "./editorjs-columns.svg";
 import style from "./editorjs-columns.scss";
 
-import EditorJS from '@editorjs/editorjs'; // required for npm mode
+// import EditorJS from '@editorjs/editorjs'; // required for npm mode
 
 class EditorJsColumns {
 
@@ -32,7 +32,11 @@ class EditorJsColumns {
 		// start by setting up the required parts
 		this.api = api;
 		this.readOnly = readOnly;
-		this.config = config || {};
+		this.config = config || {}
+
+		console.log(this.config)
+
+		console.log(this.config.EditorJsLibrary)
 
 		this._CSS = {
 			block: this.api.styles.block,
@@ -166,7 +170,7 @@ class EditorJsColumns {
 
 			this.colWrapper.appendChild(col);
 
-			let editorjs_instance = new EditorJS({
+			let editorjs_instance = new this.config.EditorJsLibrary({
 				defaultBlock: "paragraph",
 				holder: editor_col_id,
 				tools: this.config.tools,
@@ -260,7 +264,7 @@ class EditorJsColumns {
 
 			this.colWrapper.appendChild(col);
 
-			let editorjs_instance = new EditorJS({
+			let editorjs_instance = new this.config.EditorJsLibrary({
 				defaultBlock: "paragraph",
 				holder: editor_col_id,
 				tools: this.config.tools,

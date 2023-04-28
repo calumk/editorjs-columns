@@ -84,18 +84,9 @@
   <!-- Initialization -->
   <script>
 
-    // first define the tools to be made avaliable in the columns
-    let column_tools = {
-      header: Header,
-      alert : Alert,
-      // paragraph : editorjsParagraphLinebreakable,
-      delimiter : Delimiter
-    }
-
     // next define the tools in the main block
-    // Warning - Dont just use main_tools - you will probably generate a circular reference 
-    let main_tools = {
-
+    
+    let tools = {
     // Load Official Tools
       header: Header,
       alert : Alert,
@@ -105,8 +96,12 @@
       columns : {
         class : editorjsColumns,
         config : {
-          tools : column_tools, // ref the column_tools
-          EditorJsLibrary : EditorJS
+          tools : {
+            header: Header,
+            alert : Alert,
+            delimiter : Delimiter
+          },
+          EditorJsLibrary : EditorJS //ref EditorJS - This means only one global thing
         }
       },
     }
@@ -116,7 +111,7 @@
     editor = new EditorJS({
       readOnly: false,
       holder: 'editorjs',
-      tools : main_tools,
+      tools : tools,
       data: example_data, // Imported from example_data.js
 
 
