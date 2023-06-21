@@ -46,6 +46,7 @@ class EditorJsColumns {
 		if (!this.readOnly) {
 			this.onKeyUp = this.onKeyUp.bind(this);
 		}
+		
 
 
 		this._data = {};
@@ -204,6 +205,14 @@ class EditorJsColumns {
 
 
 
+		// astops the double paste issue
+		this.colWrapper.addEventListener('paste', (event) => {
+			// event.preventDefault();
+			event.stopPropagation();
+		}, true);   
+
+
+
 		this.colWrapper.addEventListener('keydown', (event) => {
 
 			// if (event.key === "Enter" && event.altKey) {
@@ -232,8 +241,6 @@ class EditorJsColumns {
 				event.stopImmediatePropagation();
 				event.stopPropagation();
 				
-				
-
 				// console.log("TAB Captured")
 			}
 		});
