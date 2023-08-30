@@ -79,9 +79,9 @@ let main_tools = {
 
     columns : {
         class : editorjsColumns,
-        EditorJsLibrary : EditorJs // Pass the library instance to the columns instance.
         config : {
-          tools : column_tools, // IMPORTANT! ref the column_tools
+          EditorJsLibrary : EditorJs, // Pass the library instance to the columns instance.
+          tools : column_tools // IMPORTANT! ref the column_tools
         }
       },
 }
