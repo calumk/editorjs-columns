@@ -34,9 +34,9 @@ class EditorJsColumns {
 		this.readOnly = readOnly;
 		this.config = config || {}
 
-		console.log(this.config)
+		// console.log(this.config)
 
-		console.log(this.config.EditorJsLibrary)
+		// console.log(this.config.EditorJsLibrary)
 
 		this._CSS = {
 			block: this.api.styles.block,
@@ -74,8 +74,8 @@ class EditorJsColumns {
 
 
 	onKeyUp(e) {
-		console.log(e)
-		console.log("heyup")
+		// console.log(e)
+		// console.log("heyup")
 		if (e.code !== "Backspace" && e.code !== "Delete") {
 			return;
 		}
