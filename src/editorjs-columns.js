@@ -126,6 +126,7 @@ class EditorJsColumns {
 					text: this.api.i18n.t("This will delete Column 3!"),
 					icon: "warning",
 					showCancelButton: true,
+					cancelButtonText: this.api.i18n.t("Cancel"),
 					confirmButtonColor: "#3085d6",
 					cancelButtonColor: "#d33",
 					confirmButtonText: this.api.i18n.t("Yes, delete it!"),
