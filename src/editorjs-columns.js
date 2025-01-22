@@ -93,17 +93,17 @@ class EditorJsColumns {
 		return [
 			{
 				icon : "2",
-				label : "2 Columns",
+				label : this.api.i18n.t("2 Columns"),
 				onActivate : () => {this._updateCols(2)}
 			},
 			{
 				icon : "3",
-				label : "3 Columns",
+				label : this.api.i18n.t("3 Columns"),
 				onActivate : () => {this._updateCols(3)}
 			},
 			{
 				icon : "R",
-				label : "Roll Colls",
+				label : this.api.i18n.t("Roll Columns"),
 				onActivate : () => {this._rollCols()}
 			},
 			]
@@ -122,13 +122,13 @@ class EditorJsColumns {
 		if (num == 2) {
 			if (this.editors.numberOfColumns == 3) {
 				let resp = await Swal.fire({
-					title: "Are you sure?",
-					text: "This will delete Column 3!",
+					title: this.api.i18n.t("Are you sure?"),
+					text: this.api.i18n.t("This will delete Column 3!"),
 					icon: "warning",
 					showCancelButton: true,
 					confirmButtonColor: "#3085d6",
 					cancelButtonColor: "#d33",
-					confirmButtonText: "Yes, delete it!",
+					confirmButtonText: this.api.i18n.t("Yes, delete it!"),
 				});
 
 				if (resp.isConfirmed) {
