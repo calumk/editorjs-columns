@@ -103,7 +103,7 @@ i18n: {
 			columns: {
 				'2 Columns': `Dos columnas`,
 				'3 Columns': `Tres columnas`, 
-				'Roll Colls': `Rotar columnas`,
+				'Roll Columns': `Rotar columnas`,
                 'Are you sure?': `¿Está seguro?`,
 				'This will delete Column 3!': `¡Esto eliminará la Columna 3!`,
 				'Yes, delete it!': `¡Sí, eliminar!`,

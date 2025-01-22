@@ -104,13 +104,13 @@ class EditorJsColumns {
 			{
 				icon : "R",
 				label : this.api.i18n.t("Roll Columns"),
-				onActivate : () => {this._rollCols()}
+				onActivate : () => {this._rollColumns()}
 			},
 			]
 	}
 
 
-	_rollCols() {
+	_rollColumns() {
 		// this shifts or "rolls" the columns
 		this.data.cols.unshift(this.data.cols.pop());
 		this.editors.cols.unshift(this.editors.cols.pop());
