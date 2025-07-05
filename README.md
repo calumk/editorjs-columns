@@ -1,14 +1,13 @@
 # @calumk/editorjs-Columns
 
-A **BETA** plugin which allows the user to have columns
+A plugin which allows the user to have columns!
 
-> Pull requests welcomed!
+Please Read the **Known Bugs** Section!  Pull requests are very much welcomed!
 
 ## Installation
 
 
 > npm i @calumk/editorjs-columns
-
 
 > https://cdn.jsdelivr.net/npm/@calumk/editorjs-columns@latest
 
@@ -39,10 +38,13 @@ A **BETA** plugin which allows the user to have columns
 
 
 # Known Bugs
+
 * Pressing enter key inside a column, will exit the column 
     * Can be solved (sort-of) by using @calumk/editorjs-paragraph-linebreakable
-* Pressing tab key inside column will launch both column, and parent tools
-* Copy/Pasting can cause duplication of data in the wrong place
+      
+* Pressing tab key inside column will launch both column, and parent tools - This is hard to solve, as pasting triggers propergation up the column editor into the main editor
+* Copy/Pasting can cause duplication of data in the wrong place - This is hard to solve, as pasting triggers propergation up the column editor into the main editor
+  
 * ~~z-index issues with toolboxes~~
 * ~~Tools are hosted as global var~~
 * ~~All Styling is currently only in the example.html~~
