@@ -25,7 +25,6 @@ class EditorJsColumns {
 		return true;
 	}
 
-
 	constructor({ data, config, api, readOnly }) {
 		// console.log("API")
 		// console.log(api)
@@ -65,7 +64,7 @@ class EditorJsColumns {
 		} else {
 			this.editors.numberOfColumns = this.data.cols.length;
 		}
-
+        this.maxColumns = config.maxColumns || 3;
 	}
 
 	static get isReadOnlySupported() {
@@ -88,31 +87,25 @@ class EditorJsColumns {
 		};
 	}
 
-
 	renderSettings() {
-		return [
-			{
-				icon : "2",
-				label : this.api.i18n.t("2 Columns"),
-				onActivate : () => {this._updateCols(2)}
-			},
-			{
-				icon : "3",
-				label : this.api.i18n.t("3 Columns"),
-				onActivate : () => {this._updateCols(3)}
-			},
-            {
-				icon : "4",
-				label : this.api.i18n.t("4 Columns"),
-				onActivate : () => {this._updateCols(4)}
-			},
-			{
-				icon : "R",
-				label : this.api.i18n.t("Roll Columns"),
-				onActivate : () => {this._rollColumns()}
-			},
-			]
-	}
+        const settings = [];
+
+        for (let cols = 2; cols <= this.maxColumns; cols++) {
+            settings.push({
+                icon: String(cols),
+                label: this.api.i18n.t(`${cols} Columns`),
+                onActivate: () => { this._updateCols(cols); }
+            });
+        }
+
+        settings.push({
+            icon: "R",
+            label: this.api.i18n.t("Roll Columns"),
+            onActivate: () => { this._rollColumns(); }
+        });
+
+        return settings;
+    }
 
 
 	_rollColumns() {
