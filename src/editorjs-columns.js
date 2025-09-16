@@ -123,7 +123,7 @@ class EditorJsColumns {
 	}
 
 	async _updateCols(num) {
-        this.editors.numberOfColumns = 4;
+        this.editors.numberOfColumns = num;
 		this._rerender();
 	}
 
