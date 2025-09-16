@@ -122,10 +122,35 @@ class EditorJsColumns {
 		this._rerender();
 	}
 
-	async _updateCols(num) {
+    async _updateCols(num) {
+        const currentCols = this.editors.numberOfColumns;
+        if (num < currentCols) {
+            let text;
+            if (currentCols - num === 1) {
+                text = `This will delete column ${num + 1}`
+            } else {
+                text = `This will delete columns ${num + 1} to ${currentCols}`
+            }
+            let resp = await Swal.fire({
+                title: this.api.i18n.t("Are you sure?"),
+                text: this.api.i18n.t(text),
+                icon: "warning",
+                showCancelButton: true,
+                cancelButtonText: this.api.i18n.t("Cancel"),
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: this.api.i18n.t("Yes, delete them!"),
+            });
+            if (!resp.isConfirmed) {
+                return;
+            }
+            // Remove extra columns
+            this.data.cols.splice(num);
+            this.editors.cols.splice(num);
+        }
         this.editors.numberOfColumns = num;
-		this._rerender();
-	}
+        this._rerender();
+    }
 
 	async _rerender() {
 		await this.save();
