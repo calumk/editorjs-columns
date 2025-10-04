@@ -82,9 +82,13 @@ let main_tools = {
     columns : {
         class : editorjsColumns,
         config : {
-          EditorJsLibrary : EditorJs, // Pass the library instance to the columns instance.
-          tools : column_tools // IMPORTANT! ref the column_tools
-          maxColumns: 4, // Extends the maximum number of columns a user can create
+            EditorJsLibrary : EditorJs, // Pass the library instance to the columns instance.
+            tools : column_tools, // IMPORTANT! ref the column_tools
+            /**
+             * Optional: Allows users to create up to 6 columns (default: 3).
+             * More than 6 is possible but not recommended for readability/layout.
+             */
+            maxColumns: 4,
         }
       },
 }
