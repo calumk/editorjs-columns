@@ -25,7 +25,6 @@ class EditorJsColumns {
 		return true;
 	}
 
-
 	constructor({ data, config, api, readOnly }) {
 		// console.log("API")
 		// console.log(api)
@@ -65,7 +64,7 @@ class EditorJsColumns {
 		} else {
 			this.editors.numberOfColumns = this.data.cols.length;
 		}
-
+		this.maxColumns = config.maxColumns || 3;
 	}
 
 	static get isReadOnlySupported() {
@@ -88,25 +87,24 @@ class EditorJsColumns {
 		};
 	}
 
-
 	renderSettings() {
-		return [
-			{
-				icon : "2",
-				label : this.api.i18n.t("2 Columns"),
-				onActivate : () => {this._updateCols(2)}
-			},
-			{
-				icon : "3",
-				label : this.api.i18n.t("3 Columns"),
-				onActivate : () => {this._updateCols(3)}
-			},
-			{
-				icon : "R",
-				label : this.api.i18n.t("Roll Columns"),
-				onActivate : () => {this._rollColumns()}
-			},
-			]
+		const settings = [];
+
+		for (let cols = 2; cols <= this.maxColumns; cols++) {
+			settings.push({
+				icon: String(cols),
+				label: this.api.i18n.t(`${cols} Columns`),
+				onActivate: () => { this._updateCols(cols); }
+			});
+		}
+
+		settings.push({
+			icon: "R",
+			label: this.api.i18n.t("Roll Columns"),
+			onActivate: () => { this._rollColumns(); }
+		});
+
+		return settings;
 	}
 
 
@@ -118,33 +116,33 @@ class EditorJsColumns {
 	}
 
 	async _updateCols(num) {
-		// Should probably update to make number dynamic... but this will do for now
-		if (num == 2) {
-			if (this.editors.numberOfColumns == 3) {
-				let resp = await Swal.fire({
-					title: this.api.i18n.t("Are you sure?"),
-					text: this.api.i18n.t("This will delete Column 3!"),
-					icon: "warning",
-					showCancelButton: true,
-					cancelButtonText: this.api.i18n.t("Cancel"),
-					confirmButtonColor: "#3085d6",
-					cancelButtonColor: "#d33",
-					confirmButtonText: this.api.i18n.t("Yes, delete it!"),
-				});
-
-				if (resp.isConfirmed) {
-					this.editors.numberOfColumns = 2;
-					this.data.cols.pop();
-					this.editors.cols.pop();
-					this._rerender();
-				}
+		const currentCols = this.editors.numberOfColumns;
+		if (num < currentCols) {
+			let text;
+			if (currentCols - num === 1) {
+				text = `This will delete column ${num + 1}`
+			} else {
+				text = `This will delete columns ${num + 1} to ${currentCols}`
 			}
+			let resp = await Swal.fire({
+				title: this.api.i18n.t("Are you sure?"),
+				text: this.api.i18n.t(text),
+				icon: "warning",
+				showCancelButton: true,
+				cancelButtonText: this.api.i18n.t("Cancel"),
+				confirmButtonColor: "#3085d6",
+				cancelButtonColor: "#d33",
+				confirmButtonText: this.api.i18n.t("Yes, delete them!"),
+			});
+			if (!resp.isConfirmed) {
+				return;
+			}
+			// Remove extra columns
+			this.data.cols.splice(num);
+			this.editors.cols.splice(num);
 		}
-		if (num == 3) {
-			this.editors.numberOfColumns = 3;
-			this._rerender();
-			// console.log(3);
-		}
+		this.editors.numberOfColumns = num;
+		this._rerender();
 	}
 
 	async _rerender() {
@@ -210,21 +208,21 @@ class EditorJsColumns {
 		this.colWrapper.addEventListener('paste', (event) => {
 			// event.preventDefault();
 			event.stopPropagation();
-		}, true);   
+		}, true);	
 
 
 
 		this.colWrapper.addEventListener('keydown', (event) => {
 
 			// if (event.key === "Enter" && event.altKey) {
-			// 	console.log("ENTER ALT Captured")
-			// 	console.log(event.target)
+			//	console.log("ENTER ALT Captured")
+			//	console.log(event.target)
 
-			// 	// let b = event.target.dispatchEvent(new KeyboardEvent('keyup',{'key':'a'}));
+			//	// let b = event.target.dispatchEvent(new KeyboardEvent('keyup',{'key':'a'}));
 
-			// 	event.target.innerText += "Aß"
+			//	event.target.innerText += "Aß"
 
-			// 	// console.log(b)
+			//	// console.log(b)
 			// }
 			// else 
 			if (event.key === "Enter") {
