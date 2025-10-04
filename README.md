@@ -84,6 +84,7 @@ let main_tools = {
         config : {
           EditorJsLibrary : EditorJs, // Pass the library instance to the columns instance.
           tools : column_tools // IMPORTANT! ref the column_tools
+          maxColumns: 4, // Extends the maximum number of columns a user can create
         }
       },
 }
