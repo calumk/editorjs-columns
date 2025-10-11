@@ -1,7 +1,0 @@
-/**
- * Column Block for the Editor.js.
- *
- * @author Calum Knott (calum@calumk.com)
- * @copyright Calum Knott
- * @license The MIT License (MIT)
- */
