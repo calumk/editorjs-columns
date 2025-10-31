@@ -96,23 +96,26 @@ editor = new EditorJS({
 
 You can also use the i18n feature of Editor.js to change the text of the tools.
 ```javascript
-i18n: {
-	messages: {
-		toolNames: {
-			Columns: `Columnas`,
-		},
-		tools: {
-			columns: {
-				'2 Columns': `Dos columnas`,
-				'3 Columns': `Tres columnas`, 
-				'Roll Columns': `Rotar columnas`,
-                'Are you sure?': `¿Está seguro?`,
-				'This will delete Column 3!': `¡Esto eliminará la Columna 3!`,
-				'Yes, delete it!': `¡Sí, eliminar!`,
-				Cancel: `Cancelar`,
-			},
-		},
-	},
-};
+editor = new EditorJS({
+    tools: main_tools,
+    i18n: {
+        messages: {
+            toolNames: {
+                'Columns': 'Columnas',
+            },
+            tools: {
+                columns: {
+                    '2 Columns': 'Dos columnas',
+                    '3 Columns': 'Tres columnas', 
+                    'Roll Columns': 'Rotar columnas',
+                    'Are you sure?': '¿Está seguro?',
+                    'This will delete Column 3!': '¡Esto eliminará la Columna 3!',
+                    'Yes, delete it!': '¡Sí, eliminar!',
+                    'Cancel': 'Cancelar',
+                },
+            },
+        },
+    },
+});
 
 ```

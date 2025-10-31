@@ -93,17 +93,17 @@ class EditorJsColumns {
 		return [
 			{
 				icon : "2",
-				label : this.api.i18n.t("2 Columns"),
+				label : this.api.i18n.t("2 Columns", undefined, "columns"),
 				onActivate : () => {this._updateCols(2)}
 			},
 			{
 				icon : "3",
-				label : this.api.i18n.t("3 Columns"),
+				label : this.api.i18n.t("3 Columns", undefined, "columns"),
 				onActivate : () => {this._updateCols(3)}
 			},
 			{
 				icon : "R",
-				label : this.api.i18n.t("Roll Columns"),
+				label : this.api.i18n.t("Roll Columns", undefined, "columns"),
 				onActivate : () => {this._rollColumns()}
 			},
 			]
@@ -122,14 +122,14 @@ class EditorJsColumns {
 		if (num == 2) {
 			if (this.editors.numberOfColumns == 3) {
 				let resp = await Swal.fire({
-					title: this.api.i18n.t("Are you sure?"),
-					text: this.api.i18n.t("This will delete Column 3!"),
+					title: this.api.i18n.t("Are you sure?", undefined, "columns"),
+					text: this.api.i18n.t("This will delete Column 3!", undefined, "columns"),
 					icon: "warning",
 					showCancelButton: true,
-					cancelButtonText: this.api.i18n.t("Cancel"),
+					cancelButtonText: this.api.i18n.t("Cancel", undefined, "columns"),
 					confirmButtonColor: "#3085d6",
 					cancelButtonColor: "#d33",
-					confirmButtonText: this.api.i18n.t("Yes, delete it!"),
+					confirmButtonText: this.api.i18n.t("Yes, delete it!", undefined, "columns"),
 				});
 
 				if (resp.isConfirmed) {
