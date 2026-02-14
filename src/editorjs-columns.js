@@ -26,17 +26,12 @@ class EditorJsColumns {
 	}
 
 
-	constructor({ data, config, api, readOnly }) {
-		// console.log("API")
-		// console.log(api)
+	constructor({ data, config, api, readOnly, block }) {
 		// start by setting up the required parts
 		this.api = api;
 		this.readOnly = readOnly;
 		this.config = config || {}
-
-		// console.log(this.config)
-
-		// console.log(this.config.EditorJsLibrary)
+		this.block = block;
 
 		this._CSS = {
 			block: this.api.styles.block,
@@ -46,8 +41,6 @@ class EditorJsColumns {
 		if (!this.readOnly) {
 			this.onKeyUp = this.onKeyUp.bind(this);
 		}
-		
-
 
 		this._data = {};
 
@@ -56,6 +49,9 @@ class EditorJsColumns {
 		this.colWrapper = undefined;
 
 		this.editors.cols = [];
+
+		// Timer for debounced parent change notifications
+		this._dispatchTimer = null;
 
 		this.data = data;
 
@@ -66,6 +62,36 @@ class EditorJsColumns {
 			this.editors.numberOfColumns = this.data.cols.length;
 		}
 
+	}
+
+	// Selector for all EditorJS toolbar/UI elements
+	static get TOOLBAR_SELECTOR() {
+		return '.ce-inline-toolbar, .ce-toolbar, .ce-toolbox, .ce-popover, .ce-conversion-toolbar, .ce-settings';
+	}
+
+	/**
+	 * Notify the parent editor that content changed, but only when no
+	 * toolbar interaction is in progress. Debounced to 300ms so rapid
+	 * mutations (e.g. each keystroke in a link URL input) don't each
+	 * trigger the parent's onChange → save() chain.
+	 *
+	 * If the toolbar is still active when the debounce fires, the
+	 * notification is skipped — the next child onChange after the
+	 * toolbar closes will dispatch it.
+	 */
+	_notifyParentChanged() {
+		if (!this.block) return;
+		clearTimeout(this._dispatchTimer);
+		this._dispatchTimer = setTimeout(() => {
+			const active = document.activeElement;
+			const toolbarHasFocus = active
+				&& this.colWrapper
+				&& this.colWrapper.contains(active)
+				&& active.closest(EditorJsColumns.TOOLBAR_SELECTOR);
+			if (!toolbarHasFocus) {
+				this.block.dispatchChange();
+			}
+		}, 300);
 	}
 
 	static get isReadOnlySupported() {
@@ -179,6 +205,7 @@ class EditorJsColumns {
 				data: this.data.cols[index],
 				readOnly: this.readOnly,
 				minHeight: 50,
+				onChange: () => this._notifyParentChanged(),
 			});
 
 			this.editors.cols.push(editorjs_instance);
@@ -187,64 +214,107 @@ class EditorJsColumns {
 
 	render() {
 
-		// This is needed to prevent the enter / tab keys - it globally removes them!!!
-
-
-		// // it runs MULTIPLE times. - this is not good, but works for now
-
-
-
-
-
-
-		// console.log("Generating Wrapper");
-
-		// console.log(this.api.blocks.getCurrentBlockIndex());
-
 		this.colWrapper = document.createElement("div");
 		this.colWrapper.classList.add("ce-editorjsColumns_wrapper");
 
+		// ──────────────────────────────────────────────────────────────
+		// Mutation observer isolation: mark the column wrapper so the
+		// parent editor's MutationObserver ignores DOM changes inside
+		// it (e.g. child toolbars appearing/disappearing on hover).
+		// Without this, every hover triggers the parent's onChange
+		// callback, causing false "unsaved changes" state.
+		//
+		// Real content changes are forwarded to the parent via
+		// block.dispatchChange() in each child editor's onChange.
+		// ──────────────────────────────────────────────────────────────
+		this.colWrapper.setAttribute('data-mutation-free', 'true');
 
+		if (!this.readOnly) {
+			// ──────────────────────────────────────────────────────────────
+			// Event isolation: use BUBBLE phase so child editors handle
+			// events first, then stop propagation to prevent the parent
+			// EditorJS instance from also processing them.
+			//
+			// Only keyboard and clipboard events are stopped. Mouse and
+			// focus events must propagate — child editors use event
+			// delegation for toolbar interactions.
+			// ──────────────────────────────────────────────────────────────
 
-		// astops the double paste issue
-		this.colWrapper.addEventListener('paste', (event) => {
-			// event.preventDefault();
-			event.stopPropagation();
-		}, true);   
+			const stop = (event) => event.stopPropagation();
 
+			this.colWrapper.addEventListener('keydown', stop);
+			this.colWrapper.addEventListener('keyup', stop);
+			this.colWrapper.addEventListener('keypress', stop);
 
+			this.colWrapper.addEventListener('paste', stop);
+			this.colWrapper.addEventListener('copy', stop);
+			this.colWrapper.addEventListener('cut', stop);
 
-		this.colWrapper.addEventListener('keydown', (event) => {
+			// ──────────────────────────────────────────────────────────────
+			// Focus management for non-editable blocks (images, embeds).
+			//
+			// When clicking an image, activeElement can land outside the
+			// colWrapper (images aren't focusable). Subsequent keyboard
+			// events (like Tab) then fire from above it — our
+			// stopPropagation handlers never see them and the parent
+			// editor opens its toolbox too.
+			//
+			// Fix: make colWrapper focusable and reclaim focus after
+			// clicking non-editable content. Uses 'click' (not mousedown)
+			// with a short setTimeout so EditorJS finishes its own click
+			// processing (block selection etc.) before we check focus.
+			// ──────────────────────────────────────────────────────────────
+			this.colWrapper.setAttribute('tabindex', '-1');
+			this.colWrapper.style.outline = 'none';
 
-			// if (event.key === "Enter" && event.altKey) {
-			// 	console.log("ENTER ALT Captured")
-			// 	console.log(event.target)
+			this.colWrapper.addEventListener('click', (event) => {
+				// Don't interfere with toolbar interactions
+				if (event.target.closest(EditorJsColumns.TOOLBAR_SELECTOR)) return;
 
-			// 	// let b = event.target.dispatchEvent(new KeyboardEvent('keyup',{'key':'a'}));
+				setTimeout(() => {
+					// Don't reclaim if there's an active text selection
+					const selection = window.getSelection();
+					if (selection && !selection.isCollapsed) return;
 
-			// 	event.target.innerText += "Aß"
+					// Don't reclaim if focus is already inside colWrapper
+					if (this.colWrapper.contains(document.activeElement)) return;
 
-			// 	// console.log(b)
-			// }
-			// else 
-			if (event.key === "Enter") {
-				event.preventDefault();
-				event.stopImmediatePropagation();
-				event.stopPropagation();
-				
-				// console.log("ENTER Captured")
-				// this.api.blocks.insertNewBlock({type : "alert"});
-				// console.log("Added Block")
-			}
-			if (event.key === "Tab") {
-				// event.stopImmediatePropagation();
-				event.preventDefault();
-				event.stopImmediatePropagation();
-				event.stopPropagation();
-				
-				// console.log("TAB Captured")
-			}
-		});
+					this.colWrapper.focus();
+				}, 20);
+			});
+
+			// ──────────────────────────────────────────────────────────────
+			// Workaround for EditorJS core bug #2736:
+			// https://github.com/codex-team/editor.js/issues/2736
+			//
+			// When focus moves to the inline toolbar's URL input inside
+			// a nested editor, the parent editor's selectionChanged
+			// handler fires (via document 'selectionchange') and
+			// incorrectly determines that focus has left the block,
+			// closing the child's toolbar.
+			//
+			// Fix: capture-phase listener on document for selectionchange
+			// that runs BEFORE the parent editor's handler (which uses
+			// bubble phase). When a child editor's inline toolbar is
+			// active inside our column wrapper, stop the event so the
+			// parent never processes it.
+			// ──────────────────────────────────────────────────────────────
+			this._selectionChangeHandler = (e) => {
+				if (!this.colWrapper) return;
+				const active = document.activeElement;
+				// Only block selectionchange when focus is on an INPUT
+				// inside the inline toolbar (e.g. the link URL field).
+				// Don't block for toolbar button clicks (bold, italic)
+				// — the child editor needs to process those selection
+				// changes to maintain its inline tool state.
+				if (active && this.colWrapper.contains(active)
+					&& active.closest('.ce-inline-toolbar')
+					&& (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) {
+					e.stopImmediatePropagation();
+				}
+			};
+			document.addEventListener('selectionchange', this._selectionChangeHandler, true);
+		}
 
 
 
@@ -279,6 +349,7 @@ class EditorJsColumns {
 				data: this.data.cols[index],
 				readOnly: this.readOnly,
 				minHeight: 50,
+				onChange: () => this._notifyParentChanged(),
 			});
 
 			this.editors.cols.push(editorjs_instance);
@@ -289,7 +360,24 @@ class EditorJsColumns {
 
 	async save() {
 		if(!this.readOnly){
-			// console.log("Saving");
+			// Force the currently focused block inside any column to
+			// commit its content before we ask the child editors to save.
+			// Without this, contenteditable blocks that still have focus
+			// may not have flushed their latest text into EditorJS's
+			// internal state.
+			const active = this.colWrapper && this.colWrapper.contains(document.activeElement)
+				? document.activeElement
+				: null;
+			if (active && typeof active.blur === 'function') {
+				// Don't blur if focus is on a toolbar element (e.g. the
+				// link URL input). Blurring would close the toolbar and
+				// prevent the user from completing their action.
+				const isInToolbar = active.closest(EditorJsColumns.TOOLBAR_SELECTOR);
+				if (!isInToolbar) {
+					active.blur();
+				}
+			}
+
 			for (let index = 0; index < this.editors.cols.length; index++) {
 				let colData = await this.editors.cols[index].save();
 				this.data.cols[index] = colData;
@@ -303,6 +391,14 @@ class EditorJsColumns {
 			icon: icon,
 			title: "Columns",
 		};
+	}
+
+	destroy() {
+		// Clean up the document-level selectionchange listener
+		if (this._selectionChangeHandler) {
+			document.removeEventListener('selectionchange', this._selectionChangeHandler, true);
+			this._selectionChangeHandler = null;
+		}
 	}
 }
 
