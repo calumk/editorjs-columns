@@ -12,8 +12,6 @@
  */
 
 import { v4 as uuidv4 } from "uuid";
-import Swal from "sweetalert2";
-
 import icon from "./editorjs-columns.svg";
 import style from "./editorjs-columns.scss";
 
@@ -46,7 +44,7 @@ class EditorJsColumns {
 		if (!this.readOnly) {
 			this.onKeyUp = this.onKeyUp.bind(this);
 		}
-		
+
 
 
 		this._data = {};
@@ -72,7 +70,6 @@ class EditorJsColumns {
 		return true;
 	}
 
-
 	onKeyUp(e) {
 		// console.log(e)
 		// console.log("heyup")
@@ -88,67 +85,14 @@ class EditorJsColumns {
 		};
 	}
 
-
 	renderSettings() {
-		return [
-			{
-				icon : "2",
-				label : this.api.i18n.t("2 Columns"),
-				onActivate : () => {this._updateCols(2)}
-			},
-			{
-				icon : "3",
-				label : this.api.i18n.t("3 Columns"),
-				onActivate : () => {this._updateCols(3)}
-			},
-			{
-				icon : "R",
-				label : this.api.i18n.t("Roll Columns"),
-				onActivate : () => {this._rollColumns()}
-			},
-			]
+		return []
 	}
 
-
-	_rollColumns() {
-		// this shifts or "rolls" the columns
-		this.data.cols.unshift(this.data.cols.pop());
-		this.editors.cols.unshift(this.editors.cols.pop());
-		this._rerender();
-	}
-
-	async _updateCols(num) {
-		// Should probably update to make number dynamic... but this will do for now
-		if (num == 2) {
-			if (this.editors.numberOfColumns == 3) {
-				let resp = await Swal.fire({
-					title: this.api.i18n.t("Are you sure?"),
-					text: this.api.i18n.t("This will delete Column 3!"),
-					icon: "warning",
-					showCancelButton: true,
-					cancelButtonText: this.api.i18n.t("Cancel"),
-					confirmButtonColor: "#3085d6",
-					cancelButtonColor: "#d33",
-					confirmButtonText: this.api.i18n.t("Yes, delete it!"),
-				});
-
-				if (resp.isConfirmed) {
-					this.editors.numberOfColumns = 2;
-					this.data.cols.pop();
-					this.editors.cols.pop();
-					this._rerender();
-				}
-			}
+	async _rerender(save = true, reset = true) {
+		if (save) {
+			await this.save();
 		}
-		if (num == 3) {
-			this.editors.numberOfColumns = 3;
-			this._rerender();
-			// console.log(3);
-		}
-	}
-
-	async _rerender() {
-		await this.save();
 		// console.log(this.colWrapper);
 
 		for (let index = 0; index < this.editors.cols.length; index++) {
@@ -156,7 +100,9 @@ class EditorJsColumns {
 		}
 		this.editors.cols = [];
 
-		this.colWrapper.innerHTML = "";
+		if (reset) {
+			this.colWrapper.innerHTML = "";
+		}
 
 		// console.log("Building the columns");
 
@@ -181,7 +127,55 @@ class EditorJsColumns {
 				minHeight: 50,
 			});
 
+			const menu = document.createElement("div");
+			menu.classList.add("ce-editorjsColumns_menu");
+
+			const leftButton = document.createElement("button");
+			leftButton.innerText = "←";
+			leftButton.addEventListener("click", () => {
+				if (index === 0) return;
+				this.data.cols.splice(index - 1, 0, this.data.cols[index]);
+				this.data.cols.splice(index + 1, 1);
+				this._rerender(false, true);
+			});
+			menu.appendChild(leftButton);
+
+			const rightButton = document.createElement("button");
+			rightButton.innerText = "→";
+			rightButton.addEventListener("click", () => {
+				if (index === this.editors.numberOfColumns - 1) return;
+				this.data.cols.splice(index + 2, 0, this.data.cols[index]);
+				this.data.cols.splice(index, 1);
+				this._rerender(false, true);
+			});
+			menu.appendChild(rightButton);
+
+			const deleteButton = document.createElement("button");
+			deleteButton.innerText = "×";
+			deleteButton.addEventListener("click", () => {
+				this.editors.numberOfColumns -= 1;
+				this.data.cols.pop(index);
+				this.editors.cols.pop(index).destroy();
+				this._rerender(false, true);
+			});
+			menu.appendChild(deleteButton);
+
+			const addButton = document.createElement("button");
+			addButton.innerText = "+";
+			addButton.addEventListener("click", () => {
+				this.editors.numberOfColumns += 1;
+				console.log("Adding column at index ", index + 1);
+				console.log("Current data: ", this.data.cols);
+				this.data.cols.splice(index + 1, 0, undefined);
+				console.log("New data: ", this.data.cols);
+				this._rerender(false, true);
+			});
+			menu.appendChild(addButton);
+
+			col.appendChild(menu);
+
 			this.editors.cols.push(editorjs_instance);
+			// console.log("End column, ", index);
 		}
 	}
 
@@ -241,49 +235,12 @@ class EditorJsColumns {
 				event.preventDefault();
 				event.stopImmediatePropagation();
 				event.stopPropagation();
-				
+
 				// console.log("TAB Captured")
 			}
 		});
 
-
-
-
-
-		for (let index = 0; index < this.editors.cols.length; index++) {
-			this.editors.cols[index].destroy();
-		}
-
-		// console.log(this.editors.cols);
-		this.editors.cols = []; //empty the array of editors
-		// console.log(this.editors.cols);
-
-		// console.log("Building the columns");
-
-		for (let index = 0; index < this.editors.numberOfColumns; index++) {
-			// console.log("Start column, ", index);
-			let col = document.createElement("div");
-			col.classList.add("ce-editorjsColumns_col");
-			col.classList.add("editorjs_col_" + index);
-
-			let editor_col_id = uuidv4();
-			// console.log("generating: ", editor_col_id);
-			col.id = editor_col_id;
-
-			this.colWrapper.appendChild(col);
-
-			let editorjs_instance = new this.config.EditorJsLibrary({
-				defaultBlock: "paragraph",
-				holder: editor_col_id,
-				tools: this.config.tools,
-				data: this.data.cols[index],
-				readOnly: this.readOnly,
-				minHeight: 50,
-			});
-
-			this.editors.cols.push(editorjs_instance);
-			// console.log("End column, ", index);
-		}
+		this._rerender(false, false);
 		return this.colWrapper;
 	}
 
