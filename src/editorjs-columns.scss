@@ -2,10 +2,21 @@
 
 
 .ce-editorjsColumns_col{
+  position: relative;
   flex: 50%;
+  &:hover {
+    .ce-editorjsColumns_menu {
+      display: block;
+    }
+  }
 }
 
-
+.ce-editorjsColumns_menu {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
 
 
 .ce-editorjsColumns_wrapper{

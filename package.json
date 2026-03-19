@@ -12,7 +12,6 @@
   "license": "MIT",
   "dependencies": {
     "@editorjs/editorjs": "^2.26.5",
-    "sweetalert2": "^11.4.10",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
