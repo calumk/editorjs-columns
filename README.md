@@ -32,12 +32,20 @@ Please Read the **Known Bugs** Section!  Pull requests are very much welcomed!
 
 ## ChangeLog
 
+> 02/04/26 - Large changes - 
+> * Replaced SweetAlert with micromodal to reduce bundle size.
+> * Added propergation fixes from #27 to fix the enter key and tab key issues, and reduce the copy/paste issues.
+>
+>
 > 28/04/23 - Re-added feature - EditorJs must now be passed as instance through tool to child, to avoid duplicate editorjs installs, and ensure only one editor js instance is used.
 > 16/05/22 - Removed global tool varable. Switched to config variable for column tools (see Example)
 > ~~22/05/22 - EditorJs must now be passed as instance through tool to child, to avoid duplicate editorjs installs~~ - Rolled Back 
 
 
 # Known Bugs
+
+* Pressing enter key inside a column, will exit the column 
+    * Can be solved (sort-of) by using @calumk/editorjs-paragraph-linebreakable
       
 * Pressing tab key inside column will launch both column, and parent tools - This is hard to solve, as pasting triggers propergation up the column editor into the main editor
 * Copy/Pasting can cause duplication of data in the wrong place - This is hard to solve, as pasting triggers propergation up the column editor into the main editor
