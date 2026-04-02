@@ -38,9 +38,6 @@ Please Read the **Known Bugs** Section!  Pull requests are very much welcomed!
 
 
 # Known Bugs
-
-* Pressing enter key inside a column, will exit the column 
-    * Can be solved (sort-of) by using @calumk/editorjs-paragraph-linebreakable
       
 * Pressing tab key inside column will launch both column, and parent tools - This is hard to solve, as pasting triggers propergation up the column editor into the main editor
 * Copy/Pasting can cause duplication of data in the wrong place - This is hard to solve, as pasting triggers propergation up the column editor into the main editor

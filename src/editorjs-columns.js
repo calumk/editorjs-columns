@@ -12,7 +12,7 @@
  */
 
 import { v4 as uuidv4 } from "uuid";
-import Swal from "sweetalert2";
+import MicroModal from "micromodal";
 
 import icon from "./editorjs-columns.svg";
 import style from "./editorjs-columns.scss";
@@ -26,17 +26,12 @@ class EditorJsColumns {
 	}
 
 
-	constructor({ data, config, api, readOnly }) {
-		// console.log("API")
-		// console.log(api)
+	constructor({ data, config, api, readOnly, block }) {
 		// start by setting up the required parts
 		this.api = api;
 		this.readOnly = readOnly;
 		this.config = config || {}
-
-		// console.log(this.config)
-
-		// console.log(this.config.EditorJsLibrary)
+		this.block = block;
 
 		this._CSS = {
 			block: this.api.styles.block,
@@ -57,6 +52,8 @@ class EditorJsColumns {
 
 		this.editors.cols = [];
 
+		this._dispatchTimer = null;
+
 		this.data = data;
 
 		if (!Array.isArray(this.data.cols)) {
@@ -72,10 +69,32 @@ class EditorJsColumns {
 		return true;
 	}
 
+	// Selector for all EditorJS toolbar/UI elements
+	static get TOOLBAR_SELECTOR() {
+		return '.ce-inline-toolbar, .ce-toolbar, .ce-toolbox, .ce-popover, .ce-conversion-toolbar, .ce-settings';
+	}
+
+	/**
+	 * Notify the parent editor that content changed, debounced to 300ms.
+	 * Skipped while a toolbar element has focus to avoid disrupting
+	 * multi-step interactions (e.g. typing a link URL).
+	 */
+	_notifyParentChanged() {
+		if (!this.block) return;
+		clearTimeout(this._dispatchTimer);
+		this._dispatchTimer = setTimeout(() => {
+			const active = document.activeElement;
+			const toolbarHasFocus = active
+				&& this.colWrapper
+				&& this.colWrapper.contains(active)
+				&& active.closest(EditorJsColumns.TOOLBAR_SELECTOR);
+			if (!toolbarHasFocus) {
+				this.block.dispatchChange();
+			}
+		}, 300);
+	}
 
 	onKeyUp(e) {
-		// console.log(e)
-		// console.log("heyup")
 		if (e.code !== "Backspace" && e.code !== "Delete") {
 			return;
 		}
@@ -117,22 +136,63 @@ class EditorJsColumns {
 		this._rerender();
 	}
 
+	_createConfirmModal() {
+		const modalId = 'editorjs-columns-confirm-modal';
+		let modal = document.getElementById(modalId);
+		if (modal) modal.remove();
+
+		modal = document.createElement('div');
+		modal.id = modalId;
+		modal.classList.add('modal', 'micromodal-slide');
+		modal.setAttribute('aria-hidden', 'true');
+		modal.innerHTML = `
+			<div class="modal__overlay" tabindex="-1" data-micromodal-close>
+				<div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="${modalId}-title">
+					<header class="modal__header">
+						<h2 id="${modalId}-title" class="modal__title">${this.api.i18n.t("Are you sure?")}</h2>
+						<button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+					</header>
+					<div class="modal__content" id="${modalId}-content">
+						<p>${this.api.i18n.t("This will delete Column 3!")}</p>
+					</div>
+					<footer class="modal__footer">
+						<button class="modal__btn modal__btn--primary" data-micromodal-confirm>${this.api.i18n.t("Yes, delete it!")}</button>
+						<button class="modal__btn" data-micromodal-close>${this.api.i18n.t("Cancel")}</button>
+					</footer>
+				</div>
+			</div>`;
+
+		document.body.appendChild(modal);
+		return { modal, modalId };
+	}
+
+	_showConfirmModal() {
+		return new Promise((resolve) => {
+			const { modal, modalId } = this._createConfirmModal();
+			let confirmed = false;
+
+			const confirmBtn = modal.querySelector('[data-micromodal-confirm]');
+			confirmBtn.addEventListener('click', () => {
+				confirmed = true;
+				MicroModal.close(modalId);
+			});
+
+			MicroModal.show(modalId, {
+				onClose: () => {
+					modal.remove();
+					resolve(confirmed);
+				},
+			});
+		});
+	}
+
 	async _updateCols(num) {
 		// Should probably update to make number dynamic... but this will do for now
 		if (num == 2) {
 			if (this.editors.numberOfColumns == 3) {
-				let resp = await Swal.fire({
-					title: this.api.i18n.t("Are you sure?"),
-					text: this.api.i18n.t("This will delete Column 3!"),
-					icon: "warning",
-					showCancelButton: true,
-					cancelButtonText: this.api.i18n.t("Cancel"),
-					confirmButtonColor: "#3085d6",
-					cancelButtonColor: "#d33",
-					confirmButtonText: this.api.i18n.t("Yes, delete it!"),
-				});
+				const confirmed = await this._showConfirmModal();
 
-				if (resp.isConfirmed) {
+				if (confirmed) {
 					this.editors.numberOfColumns = 2;
 					this.data.cols.pop();
 					this.editors.cols.pop();
@@ -187,87 +247,68 @@ class EditorJsColumns {
 
 	render() {
 
-		// This is needed to prevent the enter / tab keys - it globally removes them!!!
-
-
-		// // it runs MULTIPLE times. - this is not good, but works for now
-
-
-
-
-
-
-		// console.log("Generating Wrapper");
-
-		// console.log(this.api.blocks.getCurrentBlockIndex());
-
 		this.colWrapper = document.createElement("div");
 		this.colWrapper.classList.add("ce-editorjsColumns_wrapper");
 
+		if (!this.readOnly) {
+			// Bubble-phase isolation: child editors process events first,
+			// then we stop propagation to prevent the parent editor from
+			// also handling them.
+			const stop = (event) => event.stopPropagation();
 
+			this.colWrapper.addEventListener('keydown', stop);
+			this.colWrapper.addEventListener('keyup', stop);
+			this.colWrapper.addEventListener('keypress', stop);
+			this.colWrapper.addEventListener('paste', stop);
+			this.colWrapper.addEventListener('copy', stop);
+			this.colWrapper.addEventListener('cut', stop);
 
-		// astops the double paste issue
-		this.colWrapper.addEventListener('paste', (event) => {
-			// event.preventDefault();
-			event.stopPropagation();
-		}, true);   
+			// Focus management for non-editable blocks (images, embeds).
+			// After clicking one, activeElement can land outside the
+			// colWrapper. Make it focusable and reclaim focus so keyboard
+			// events are captured by our stopPropagation handlers.
+			this.colWrapper.setAttribute('tabindex', '-1');
+			this.colWrapper.style.outline = 'none';
 
+			this.colWrapper.addEventListener('click', (event) => {
+				if (event.target.closest(EditorJsColumns.TOOLBAR_SELECTOR)) return;
+				setTimeout(() => {
+					const selection = window.getSelection();
+					if (selection && !selection.isCollapsed) return;
+					if (this.colWrapper.contains(document.activeElement)) return;
+					this.colWrapper.focus();
+				}, 20);
+			});
 
-
-		this.colWrapper.addEventListener('keydown', (event) => {
-
-			// if (event.key === "Enter" && event.altKey) {
-			// 	console.log("ENTER ALT Captured")
-			// 	console.log(event.target)
-
-			// 	// let b = event.target.dispatchEvent(new KeyboardEvent('keyup',{'key':'a'}));
-
-			// 	event.target.innerText += "Aß"
-
-			// 	// console.log(b)
-			// }
-			// else 
-			if (event.key === "Enter") {
-				event.preventDefault();
-				event.stopImmediatePropagation();
-				event.stopPropagation();
-				
-				// console.log("ENTER Captured")
-				// this.api.blocks.insertNewBlock({type : "alert"});
-				// console.log("Added Block")
-			}
-			if (event.key === "Tab") {
-				// event.stopImmediatePropagation();
-				event.preventDefault();
-				event.stopImmediatePropagation();
-				event.stopPropagation();
-				
-				// console.log("TAB Captured")
-			}
-		});
-
-
-
-
+			// Workaround for EditorJS core issue #2736:
+			// When focus moves to the inline toolbar's URL input inside
+			// a nested editor, the parent editor's selectionChanged handler
+			// closes the child's toolbar. Capture-phase listener fires
+			// before the parent's bubble-phase handler and blocks it.
+			this._selectionChangeHandler = (e) => {
+				if (!this.colWrapper) return;
+				const active = document.activeElement;
+				if (active && this.colWrapper.contains(active)
+					&& active.closest('.ce-inline-toolbar')
+					&& (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) {
+					e.stopImmediatePropagation();
+				}
+			};
+			document.addEventListener('selectionchange', this._selectionChangeHandler, true);
+		}
 
 		for (let index = 0; index < this.editors.cols.length; index++) {
 			this.editors.cols[index].destroy();
 		}
 
-		// console.log(this.editors.cols);
-		this.editors.cols = []; //empty the array of editors
-		// console.log(this.editors.cols);
-
-		// console.log("Building the columns");
+		this.editors.cols = [];
 
 		for (let index = 0; index < this.editors.numberOfColumns; index++) {
-			// console.log("Start column, ", index);
 			let col = document.createElement("div");
 			col.classList.add("ce-editorjsColumns_col");
 			col.classList.add("editorjs_col_" + index);
 
 			let editor_col_id = uuidv4();
-			// console.log("generating: ", editor_col_id);
 			col.id = editor_col_id;
 
 			this.colWrapper.appendChild(col);
@@ -279,23 +320,42 @@ class EditorJsColumns {
 				data: this.data.cols[index],
 				readOnly: this.readOnly,
 				minHeight: 50,
+				onChange: () => this._notifyParentChanged(),
 			});
 
 			this.editors.cols.push(editorjs_instance);
-			// console.log("End column, ", index);
 		}
 		return this.colWrapper;
 	}
 
 	async save() {
 		if(!this.readOnly){
-			// console.log("Saving");
+			// Blur active element to flush contenteditable content,
+			// but skip if focus is on a toolbar element.
+			const active = this.colWrapper && this.colWrapper.contains(document.activeElement)
+				? document.activeElement
+				: null;
+			if (active && typeof active.blur === 'function') {
+				const isInToolbar = active.closest(EditorJsColumns.TOOLBAR_SELECTOR);
+				if (!isInToolbar) {
+					active.blur();
+				}
+			}
+
 			for (let index = 0; index < this.editors.cols.length; index++) {
 				let colData = await this.editors.cols[index].save();
 				this.data.cols[index] = colData;
 			}
 		}
 		return this.data;
+	}
+
+	destroy() {
+		if (this._selectionChangeHandler) {
+			document.removeEventListener('selectionchange', this._selectionChangeHandler, true);
+			this._selectionChangeHandler = null;
+		}
+		clearTimeout(this._dispatchTimer);
 	}
 
 	static get toolbox() {

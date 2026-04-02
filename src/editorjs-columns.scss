@@ -1,5 +1,94 @@
 /* REQUIRED STYLES */
 
+/* MicroModal styles */
+.modal {
+  display: none;
+}
+
+.modal.is-open {
+  display: block;
+}
+
+.modal__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal__container {
+  background-color: #fff;
+  padding: 24px;
+  max-width: 420px;
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.modal__title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.modal__close {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font-size: 1.4rem;
+  padding: 4px;
+  &::before {
+    content: "\2715";
+  }
+}
+
+.modal__content {
+  margin-bottom: 20px;
+  color: #555;
+  line-height: 1.5;
+}
+
+.modal__footer {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.modal__btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  &:hover {
+    background: #f5f5f5;
+  }
+}
+
+.modal__btn--primary {
+  background: #3085d6;
+  color: #fff;
+  border-color: #3085d6;
+  &:hover {
+    background: #2070c0;
+  }
+}
+
 
 .ce-editorjsColumns_col{
   flex: 50%;
