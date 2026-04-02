@@ -10,6 +10,10 @@
   },
   "author": "Calum Knott",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/calumk/editorjs-columns"
+  },
   "dependencies": {
     "@editorjs/editorjs": "^2.31.5",
     "micromodal": "^0.4.10",
